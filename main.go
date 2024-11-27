@@ -1,18 +1,45 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"sync"
+
+	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
+	"github.com/mshortcodes/color_my_practice/internal/database"
 )
 
 type apiConfig struct {
 	count int
-	mu    sync.Mutex
+	mu    *sync.Mutex
+	db    *database.Queries
 }
 
 func main() {
+	godotenv.Load()
+
+	dbURL := os.Getenv("DB_URL")
+	if dbURL == "" {
+		log.Fatal("DB_URL not set")
+	}
+
+	dbConn, err := sql.Open("postgres", dbURL)
+	if err != nil {
+		log.Fatalf("couldn't open database: %s", err)
+	}
+
+	dbQueries := database.New(dbConn)
+
+	apiCfg := apiConfig{
+		count: 0,
+		mu:    &sync.Mutex{},
+		db:    dbQueries,
+	}
+
 	mux := http.NewServeMux()
 	port := "8080"
 
@@ -20,8 +47,6 @@ func main() {
 		Addr:    ":" + port,
 		Handler: mux,
 	}
-
-	var apiCfg apiConfig
 
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello, world!"))
