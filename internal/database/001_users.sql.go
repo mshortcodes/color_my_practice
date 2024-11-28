@@ -7,11 +7,10 @@ package database
 
 import (
 	"context"
-	"time"
 )
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users (id, email, created_at, updated_at)
+INSERT INTO users (id, created_at, updated_at, email)
 VALUES (
     gen_random_uuid(),
     NOW(),
@@ -21,8 +20,8 @@ VALUES (
 RETURNING id, created_at, updated_at, email
 `
 
-func (q *Queries) CreateUser(ctx context.Context, updatedAt time.Time) (User, error) {
-	row := q.db.QueryRowContext(ctx, createUser, updatedAt)
+func (q *Queries) CreateUser(ctx context.Context, email string) (User, error) {
+	row := q.db.QueryRowContext(ctx, createUser, email)
 	var i User
 	err := row.Scan(
 		&i.ID,
