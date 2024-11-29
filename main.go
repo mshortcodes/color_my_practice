@@ -54,6 +54,8 @@ func main() {
 
 	mux.HandleFunc("GET /count", apiCfg.handlerCountInc)
 	mux.HandleFunc("POST /api/users", apiCfg.handlerUsersCreate)
+	mux.HandleFunc("POST /api/logs", apiCfg.handlerLogsCreate)
+
 	log.Fatal(srv.ListenAndServe())
 }
 

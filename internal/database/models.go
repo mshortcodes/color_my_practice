@@ -5,10 +5,19 @@
 package database
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
 )
+
+type Log struct {
+	ID         uuid.UUID
+	Date       time.Time
+	ColorDepth int32
+	Confirmed  sql.NullBool
+	UserID     uuid.UUID
+}
 
 type User struct {
 	ID        uuid.UUID
