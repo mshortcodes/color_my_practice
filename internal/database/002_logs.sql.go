@@ -41,3 +41,37 @@ func (q *Queries) CreateLog(ctx context.Context, arg CreateLogParams) (Log, erro
 	)
 	return i, err
 }
+
+const getLogs = `-- name: GetLogs :many
+SELECT id, date, color_depth, confirmed, user_id FROM logs
+ORDER BY date DESC
+`
+
+func (q *Queries) GetLogs(ctx context.Context) ([]Log, error) {
+	rows, err := q.db.QueryContext(ctx, getLogs)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Log
+	for rows.Next() {
+		var i Log
+		if err := rows.Scan(
+			&i.ID,
+			&i.Date,
+			&i.ColorDepth,
+			&i.Confirmed,
+			&i.UserID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

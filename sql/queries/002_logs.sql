@@ -7,3 +7,7 @@ VALUES (
     $3
 )
 RETURNING *;
+
+-- name: GetLogs :many
+SELECT * FROM logs
+ORDER BY date DESC;

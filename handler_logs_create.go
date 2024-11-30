@@ -10,11 +10,11 @@ import (
 )
 
 type PracticeLog struct {
-	Id         uuid.UUID `json:"-"`
+	Id         uuid.UUID `json:"id"`
 	Date       string    `json:"date"`
 	ColorDepth int32     `json:"color_depth"`
-	Confirmed  bool      `json:"-"`
-	UserID     uuid.UUID `json:"-"`
+	Confirmed  bool      `json:"confirmed"`
+	UserID     uuid.UUID `json:"user_id"`
 }
 
 // handlerLogsCreate creates a practice log for a single day.
@@ -65,8 +65,11 @@ func (cfg *apiConfig) handlerLogsCreate(w http.ResponseWriter, r *http.Request) 
 
 	respondWithJSON(w, http.StatusCreated, response{
 		PracticeLog: PracticeLog{
-			Date:       params.Date,
+			Id:         practiceLog.ID,
+			Date:       practiceLog.Date.Format(time.DateOnly),
 			ColorDepth: practiceLog.ColorDepth,
+			Confirmed:  practiceLog.Confirmed,
+			UserID:     practiceLog.UserID,
 		},
 	})
 }

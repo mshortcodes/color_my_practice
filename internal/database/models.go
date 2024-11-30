@@ -5,7 +5,6 @@
 package database
 
 import (
-	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -15,7 +14,7 @@ type Log struct {
 	ID         uuid.UUID
 	Date       time.Time
 	ColorDepth int32
-	Confirmed  sql.NullBool
+	Confirmed  bool
 	UserID     uuid.UUID
 }
 
