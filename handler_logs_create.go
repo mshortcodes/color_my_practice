@@ -46,7 +46,7 @@ func (cfg *apiConfig) handlerLogsCreate(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	user, err := cfg.db.GetUserByEmail(r.Context(), params.Email)
+	dbUser, err := cfg.db.GetUserByEmail(r.Context(), params.Email)
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "no user with that email", err)
 		return
@@ -55,7 +55,7 @@ func (cfg *apiConfig) handlerLogsCreate(w http.ResponseWriter, r *http.Request) 
 	practiceLog, err := cfg.db.CreateLog(r.Context(), database.CreateLogParams{
 		Date:       parsedDate,
 		ColorDepth: params.ColorDepth,
-		UserID:     user.ID,
+		UserID:     dbUser.ID,
 	})
 
 	if err != nil {

@@ -57,6 +57,7 @@ func main() {
 
 	mux.HandleFunc("POST /api/logs", apiCfg.handlerLogsCreate)
 	mux.HandleFunc("GET /api/logs", apiCfg.handlerLogsGet)
+	mux.HandleFunc("GET /api/logs/{logID}", apiCfg.handlerLogsGetByID)
 
 	log.Fatal(srv.ListenAndServe())
 }
