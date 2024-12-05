@@ -17,6 +17,7 @@ type apiConfig struct {
 	count     int
 	mu        *sync.Mutex
 	db        *database.Queries
+	platform  string
 	jwtSecret string
 }
 
@@ -33,6 +34,11 @@ func main() {
 		log.Fatal("JWT_SECRET not set")
 	}
 
+	platform := os.Getenv("PLATFORM")
+	if platform == "" {
+		log.Fatal("PLATFORM not set")
+	}
+
 	dbConn, err := sql.Open("postgres", dbURL)
 	if err != nil {
 		log.Fatalf("couldn't open database: %s", err)
@@ -44,6 +50,7 @@ func main() {
 		count:     0,
 		mu:        &sync.Mutex{},
 		db:        dbQueries,
+		platform:  platform,
 		jwtSecret: jwtSecret,
 	}
 
@@ -58,6 +65,8 @@ func main() {
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello, world!"))
 	})
+
+	mux.HandleFunc("POST /admin/reset", apiCfg.handlerReset)
 
 	mux.HandleFunc("GET /count", apiCfg.handlerCountInc)
 	mux.HandleFunc("POST /api/users", apiCfg.handlerUsersCreate)
