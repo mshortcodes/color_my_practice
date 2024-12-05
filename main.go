@@ -14,9 +14,10 @@ import (
 )
 
 type apiConfig struct {
-	count int
-	mu    *sync.Mutex
-	db    *database.Queries
+	count     int
+	mu        *sync.Mutex
+	db        *database.Queries
+	jwtSecret string
 }
 
 func main() {
@@ -27,6 +28,11 @@ func main() {
 		log.Fatal("DB_URL not set")
 	}
 
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		log.Fatal("JWT_SECRET not set")
+	}
+
 	dbConn, err := sql.Open("postgres", dbURL)
 	if err != nil {
 		log.Fatalf("couldn't open database: %s", err)
@@ -35,9 +41,10 @@ func main() {
 	dbQueries := database.New(dbConn)
 
 	apiCfg := apiConfig{
-		count: 0,
-		mu:    &sync.Mutex{},
-		db:    dbQueries,
+		count:     0,
+		mu:        &sync.Mutex{},
+		db:        dbQueries,
+		jwtSecret: jwtSecret,
 	}
 
 	mux := http.NewServeMux()

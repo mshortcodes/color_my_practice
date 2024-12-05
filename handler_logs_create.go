@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/mshortcodes/color_my_practice/internal/auth"
 	"github.com/mshortcodes/color_my_practice/internal/database"
 )
 
@@ -22,7 +23,6 @@ func (cfg *apiConfig) handlerLogsCreate(w http.ResponseWriter, r *http.Request) 
 	type parameters struct {
 		Date       string `json:"date"`
 		ColorDepth int32  `json:"color_depth"`
-		Email      string `json:"email"`
 	}
 
 	type response struct {
@@ -46,16 +46,22 @@ func (cfg *apiConfig) handlerLogsCreate(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	dbUser, err := cfg.db.GetUserByEmail(r.Context(), params.Email)
+	accessToken, err := auth.GetBearerToken(r.Header)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, "no user with that email", err)
+		respondWithError(w, http.StatusUnauthorized, "missing JWT", err)
+		return
+	}
+
+	userID, err := auth.ValidateJWT(accessToken, cfg.jwtSecret)
+	if err != nil {
+		respondWithError(w, http.StatusUnauthorized, "invalid JWT", err)
 		return
 	}
 
 	practiceLog, err := cfg.db.CreateLog(r.Context(), database.CreateLogParams{
 		Date:       parsedDate,
 		ColorDepth: params.ColorDepth,
-		UserID:     dbUser.ID,
+		UserID:     userID,
 	})
 
 	if err != nil {

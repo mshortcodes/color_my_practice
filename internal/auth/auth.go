@@ -1,13 +1,18 @@
 package auth
 
 import (
+	"errors"
 	"fmt"
+	"net/http"
+	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
+
+const tokenIssuer = "color-my-practice"
 
 // HashPassword uses bcrypt to generate a hashed password from plaintext.
 func HashPassword(password string) (string, error) {
@@ -32,7 +37,7 @@ func CheckPasswordHash(password, hash string) error {
 // MakeJWT creates a new JWT.
 func MakeJWT(userID uuid.UUID, tokenSecret string, expiresIn time.Duration) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
-		Issuer:    "color-my-practice",
+		Issuer:    tokenIssuer,
 		IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
 		ExpiresAt: jwt.NewNumericDate(time.Now().UTC().Add(expiresIn)),
 		Subject:   userID.String(),
@@ -64,7 +69,7 @@ func ValidateJWT(tokenString, tokenSecret string) (uuid.UUID, error) {
 	if err != nil {
 		return uuid.Nil, err
 	}
-	if issuer != "color-my-practice" {
+	if issuer != tokenIssuer {
 		return uuid.Nil, fmt.Errorf("invalid issuer: %s", issuer)
 	}
 
@@ -74,4 +79,18 @@ func ValidateJWT(tokenString, tokenSecret string) (uuid.UUID, error) {
 	}
 
 	return id, nil
+}
+
+func GetBearerToken(headers http.Header) (string, error) {
+	authHeader := headers.Get("Authorization")
+	if authHeader == "" {
+		return "", errors.New("missing authorization header")
+	}
+
+	authSplit := strings.Fields(authHeader)
+	if authSplit[0] != "Bearer" || len(authSplit) < 2 {
+		return "", errors.New("malformed authorization header")
+	}
+
+	return authSplit[1], nil
 }
