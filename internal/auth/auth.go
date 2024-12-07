@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"crypto/rand"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"net/http"
@@ -60,17 +62,17 @@ func ValidateJWT(tokenString, tokenSecret string) (uuid.UUID, error) {
 		return uuid.Nil, err
 	}
 
-	userIDString, err := token.Claims.GetSubject()
-	if err != nil {
-		return uuid.Nil, err
-	}
-
 	issuer, err := token.Claims.GetIssuer()
 	if err != nil {
 		return uuid.Nil, err
 	}
 	if issuer != tokenIssuer {
 		return uuid.Nil, fmt.Errorf("invalid issuer: %s", issuer)
+	}
+
+	userIDString, err := token.Claims.GetSubject()
+	if err != nil {
+		return uuid.Nil, err
 	}
 
 	id, err := uuid.Parse(userIDString)
@@ -93,4 +95,16 @@ func GetBearerToken(headers http.Header) (string, error) {
 	}
 
 	return authSplit[1], nil
+}
+
+// MakeRefreshToken makes a random 256 bit token encoded in hex.
+func MakeRefreshToken() (string, error) {
+	token := make([]byte, 32)
+
+	_, err := rand.Read(token)
+	if err != nil {
+		return "", err
+	}
+
+	return hex.EncodeToString(token), nil
 }

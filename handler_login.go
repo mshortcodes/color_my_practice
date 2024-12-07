@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/mshortcodes/color_my_practice/internal/auth"
+	"github.com/mshortcodes/color_my_practice/internal/database"
 )
 
 func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
@@ -17,7 +18,8 @@ func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 
 	type response struct {
 		User
-		Token string `json:"token"`
+		Token        string `json:"token"`
+		RefreshToken string `json:"refresh_token"`
 	}
 
 	var params parameters
@@ -54,6 +56,22 @@ func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	refreshToken, err := auth.MakeRefreshToken()
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "couldn't make refresh token", err)
+		return
+	}
+
+	_, err = cfg.db.CreateRefreshToken(r.Context(), database.CreateRefreshTokenParams{
+		Token:     refreshToken,
+		UserID:    user.ID,
+		ExpiresAt: time.Now().UTC().Add(time.Hour * 24 * 60),
+	})
+	if err != nil {
+		respondWithError(w, http.StatusInternalServerError, "couldn't save refresh token", err)
+		return
+	}
+
 	respondWithJSON(w, http.StatusOK, response{
 		User: User{
 			Id:        user.ID,
@@ -61,6 +79,7 @@ func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 			UpdatedAt: user.UpdatedAt,
 			Email:     user.Email,
 		},
-		Token: accessToken,
+		Token:        accessToken,
+		RefreshToken: refreshToken,
 	})
 }
