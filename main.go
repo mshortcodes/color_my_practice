@@ -69,6 +69,7 @@ func main() {
 	mux.HandleFunc("POST /admin/reset", apiCfg.handlerReset)
 
 	mux.HandleFunc("GET /count", apiCfg.handlerCountInc)
+
 	mux.HandleFunc("POST /api/users", apiCfg.handlerUsersCreate)
 
 	mux.HandleFunc("POST /api/logs", apiCfg.handlerLogsCreate)
@@ -76,6 +77,8 @@ func main() {
 	mux.HandleFunc("GET /api/logs/{logID}", apiCfg.handlerLogsGetByID)
 
 	mux.HandleFunc("POST /api/login", apiCfg.handlerLogin)
+
+	mux.HandleFunc("POST /api/refresh", apiCfg.handlerRefresh)
 	log.Fatal(srv.ListenAndServe())
 }
 
