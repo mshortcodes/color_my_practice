@@ -71,6 +71,7 @@ func main() {
 	mux.HandleFunc("GET /count", apiCfg.handlerCountInc)
 
 	mux.HandleFunc("POST /api/users", apiCfg.handlerUsersCreate)
+	mux.HandleFunc("PUT /api/users", apiCfg.handlerUsersUpdate)
 
 	mux.HandleFunc("POST /api/logs", apiCfg.handlerLogsCreate)
 	mux.HandleFunc("GET /api/logs", apiCfg.handlerLogsGet)
