@@ -15,3 +15,7 @@ ORDER BY date DESC;
 -- name: GetLog :one
 SELECT * FROM logs
 WHERE id = $1;
+
+-- name: DeleteLog :exec
+DELETE FROM logs
+WHERE id = $1;

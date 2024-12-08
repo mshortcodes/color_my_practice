@@ -76,6 +76,7 @@ func main() {
 	mux.HandleFunc("POST /api/logs", apiCfg.handlerLogsCreate)
 	mux.HandleFunc("GET /api/logs", apiCfg.handlerLogsGet)
 	mux.HandleFunc("GET /api/logs/{logID}", apiCfg.handlerLogsGetByID)
+	mux.HandleFunc("DELETE /api/logs/{logID}", apiCfg.handlerLogsDelete)
 
 	mux.HandleFunc("POST /api/login", apiCfg.handlerLogin)
 

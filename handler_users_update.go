@@ -8,6 +8,7 @@ import (
 	"github.com/mshortcodes/color_my_practice/internal/database"
 )
 
+// handlerUsersUpdate updates a user's email and password.
 func (cfg *apiConfig) handlerUsersUpdate(w http.ResponseWriter, r *http.Request) {
 	type parameters struct {
 		Email    string `json:"email"`
