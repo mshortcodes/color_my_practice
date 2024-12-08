@@ -15,9 +15,23 @@ func (cfg *apiConfig) handlerLogsGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userID := uuid.Nil
+	userIDStr := r.URL.Query().Get("user_id")
+	if userIDStr != "" {
+		userID, err = uuid.Parse(userIDStr)
+		if err != nil {
+			respondWithError(w, http.StatusBadRequest, "invalid user ID", err)
+			return
+		}
+	}
+
 	var logs []PracticeLog
 
 	for _, dbLog := range dbLogs {
+		if userID != uuid.Nil && dbLog.UserID != userID {
+			continue
+		}
+
 		log := PracticeLog{
 			Id:         dbLog.ID,
 			Date:       dbLog.Date.Format(time.DateOnly),
