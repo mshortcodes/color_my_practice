@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
-// handlerLogsGet returns all practice logs.
+// handlerLogsGet returns logs by user ID if provided, otherwise returns all logs.
 func (cfg *apiConfig) handlerLogsGet(w http.ResponseWriter, r *http.Request) {
 	dbLogs, err := cfg.db.GetLogs(r.Context())
 	if err != nil {
