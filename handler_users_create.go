@@ -18,7 +18,7 @@ type User struct {
 	Password  string    `json:"-"`
 }
 
-// handlerUsersCreate creates a User.
+// handlerUsersCreate creates a user.
 func (cfg *apiConfig) handlerUsersCreate(w http.ResponseWriter, r *http.Request) {
 	type parameters struct {
 		Email    string `json:"email"`

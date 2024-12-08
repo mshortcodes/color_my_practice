@@ -9,6 +9,8 @@ import (
 	"github.com/mshortcodes/color_my_practice/internal/database"
 )
 
+// handlerLogin authenticates a user by checking their password.
+// Once authenticated, a JWT and refresh token are created.
 func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 	type parameters struct {
 		Email    string `json:"email"`

@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// handlerReset resets the database and sets page count to 0.
 func (cfg *apiConfig) handlerReset(w http.ResponseWriter, r *http.Request) {
 	if cfg.platform != "dev" {
 		w.WriteHeader(http.StatusForbidden)
