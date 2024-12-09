@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -14,7 +13,7 @@ import (
 )
 
 type apiConfig struct {
-	count     int
+	hits      int
 	mu        *sync.Mutex
 	db        *database.Queries
 	platform  string
@@ -47,7 +46,7 @@ func main() {
 	dbQueries := database.New(dbConn)
 
 	apiCfg := apiConfig{
-		count:     0,
+		hits:      0,
 		mu:        &sync.Mutex{},
 		db:        dbQueries,
 		platform:  platform,
@@ -62,13 +61,7 @@ func main() {
 		Handler: mux,
 	}
 
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello, world!"))
-	})
-
-	mux.HandleFunc("POST /admin/reset", apiCfg.handlerReset)
-
-	mux.HandleFunc("GET /count", apiCfg.handlerCountInc)
+	mux.HandleFunc("GET /app/", apiCfg.handlerStatus)
 
 	mux.HandleFunc("POST /api/users", apiCfg.handlerUsersCreate)
 	mux.HandleFunc("PUT /api/users", apiCfg.handlerUsersUpdate)
@@ -79,19 +72,10 @@ func main() {
 	mux.HandleFunc("DELETE /api/logs/{logID}", apiCfg.handlerLogsDelete)
 
 	mux.HandleFunc("POST /api/login", apiCfg.handlerLogin)
-
 	mux.HandleFunc("POST /api/refresh", apiCfg.handlerRefresh)
 	mux.HandleFunc("POST /api/revoke", apiCfg.handlerRevoke)
 
+	mux.HandleFunc("POST /admin/reset", apiCfg.handlerReset)
+
 	log.Fatal(srv.ListenAndServe())
-}
-
-func (cfg *apiConfig) handlerCountInc(w http.ResponseWriter, r *http.Request) {
-	cfg.mu.Lock()
-	defer cfg.mu.Unlock()
-
-	cfg.count++
-
-	countMsg := fmt.Sprintf("The count is %d", cfg.count)
-	w.Write([]byte(countMsg))
 }

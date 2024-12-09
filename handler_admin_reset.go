@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-// handlerReset resets the database and sets page count to 0.
+// handlerReset resets the database and sets page hits to 0.
 func (cfg *apiConfig) handlerReset(w http.ResponseWriter, r *http.Request) {
 	if cfg.platform != "dev" {
 		w.WriteHeader(http.StatusForbidden)
@@ -23,8 +23,8 @@ func (cfg *apiConfig) handlerReset(w http.ResponseWriter, r *http.Request) {
 
 	cfg.mu.Lock()
 	defer cfg.mu.Unlock()
-	cfg.count = 0
+	cfg.hits = 0
 
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("database reset and count set to 0"))
+	w.Write([]byte("database reset and page hits set to 0"))
 }
