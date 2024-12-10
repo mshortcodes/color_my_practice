@@ -19,3 +19,10 @@ WHERE id = $1;
 -- name: DeleteLog :exec
 DELETE FROM logs
 WHERE id = $1;
+
+-- name: ConfirmLogs :many
+UPDATE logs
+SET confirmed = true
+WHERE user_id = $1
+AND id = ANY($2::UUID[])
+RETURNING *;

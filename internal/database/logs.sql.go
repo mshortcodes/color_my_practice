@@ -10,7 +10,50 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 )
+
+const confirmLogs = `-- name: ConfirmLogs :many
+UPDATE logs
+SET confirmed = true
+WHERE user_id = $1
+AND id = ANY($2::UUID[])
+RETURNING id, date, color_depth, confirmed, user_id
+`
+
+type ConfirmLogsParams struct {
+	UserID  uuid.UUID
+	Column2 []uuid.UUID
+}
+
+func (q *Queries) ConfirmLogs(ctx context.Context, arg ConfirmLogsParams) ([]Log, error) {
+	rows, err := q.db.QueryContext(ctx, confirmLogs, arg.UserID, pq.Array(arg.Column2))
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Log
+	for rows.Next() {
+		var i Log
+		if err := rows.Scan(
+			&i.ID,
+			&i.Date,
+			&i.ColorDepth,
+			&i.Confirmed,
+			&i.UserID,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
 
 const createLog = `-- name: CreateLog :one
 INSERT INTO logs (id, date, color_depth, user_id)
