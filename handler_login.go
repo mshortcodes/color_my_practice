@@ -68,6 +68,26 @@ func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	http.SetCookie(w, &http.Cookie{
+		Name:     "jwt",
+		Value:    accessToken,
+		Path:     "/",
+		Expires:  time.Now().UTC().Add(time.Hour),
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+	})
+
+	http.SetCookie(w, &http.Cookie{
+		Name:     "refresh_token",
+		Value:    refreshToken,
+		Path:     "/api/refresh",
+		Expires:  time.Now().UTC().Add(time.Hour * 24 * 60),
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
+	})
+
 	respondWithJSON(w, http.StatusOK, response{
 		User: User{
 			Id:        user.ID,
