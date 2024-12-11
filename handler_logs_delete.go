@@ -8,13 +8,13 @@ import (
 )
 
 func (cfg *apiConfig) handlerLogsDelete(w http.ResponseWriter, r *http.Request) {
-	accessToken, err := auth.GetBearerToken(r.Header)
+	accessToken, err := r.Cookie("jwt")
 	if err != nil {
 		respondWithError(w, http.StatusUnauthorized, "missing JWT", err)
 		return
 	}
 
-	userID, err := auth.ValidateJWT(accessToken, cfg.jwtSecret)
+	userID, err := auth.ValidateJWT(accessToken.Value, cfg.jwtSecret)
 	if err != nil {
 		respondWithError(w, http.StatusUnauthorized, "invalid JWT", err)
 		return

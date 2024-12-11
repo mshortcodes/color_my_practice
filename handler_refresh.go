@@ -14,13 +14,13 @@ func (cfg *apiConfig) handlerRefresh(w http.ResponseWriter, r *http.Request) {
 		Token string `json:"token"`
 	}
 
-	refreshToken, err := auth.GetBearerToken(r.Header)
+	refreshToken, err := r.Cookie("refresh_token")
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "couldn't find token", err)
 		return
 	}
 
-	user, err := cfg.db.GetUserFromRefreshToken(r.Context(), refreshToken)
+	user, err := cfg.db.GetUserFromRefreshToken(r.Context(), refreshToken.Value)
 	if err != nil {
 		respondWithError(w, http.StatusUnauthorized, "couldn't get user", err)
 		return
@@ -39,13 +39,13 @@ func (cfg *apiConfig) handlerRefresh(w http.ResponseWriter, r *http.Request) {
 
 // handlerRevoke revokes a refresh token.
 func (cfg *apiConfig) handlerRevoke(w http.ResponseWriter, r *http.Request) {
-	refreshToken, err := auth.GetBearerToken(r.Header)
+	refreshToken, err := r.Cookie("refresh_token")
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "couldn't get token", err)
 		return
 	}
 
-	_, err = cfg.db.RevokeRefreshToken(r.Context(), refreshToken)
+	_, err = cfg.db.RevokeRefreshToken(r.Context(), refreshToken.Value)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "couldn't revoke session", err)
 		return

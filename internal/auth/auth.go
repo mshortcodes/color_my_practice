@@ -3,10 +3,7 @@ package auth
 import (
 	"crypto/rand"
 	"encoding/hex"
-	"errors"
 	"fmt"
-	"net/http"
-	"strings"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -53,7 +50,8 @@ func MakeJWT(userID uuid.UUID, tokenSecret string, expiresIn time.Duration) (str
 	return signedToken, nil
 }
 
-// validateJWT validates a JWT by extracting the claims and checking the issuer and userID.
+// validateJWT validates a JWT by extracting the claims and checking
+// the issuer, expiration time, and user ID.
 func ValidateJWT(tokenString, tokenSecret string) (uuid.UUID, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &jwt.RegisteredClaims{}, func(t *jwt.Token) (interface{}, error) {
 		return []byte(tokenSecret), nil
@@ -89,20 +87,6 @@ func ValidateJWT(tokenString, tokenSecret string) (uuid.UUID, error) {
 	}
 
 	return id, nil
-}
-
-func GetBearerToken(headers http.Header) (string, error) {
-	authHeader := headers.Get("Authorization")
-	if authHeader == "" {
-		return "", errors.New("missing authorization header")
-	}
-
-	authSplit := strings.Fields(authHeader)
-	if authSplit[0] != "Bearer" || len(authSplit) < 2 {
-		return "", errors.New("malformed authorization header")
-	}
-
-	return authSplit[1], nil
 }
 
 // MakeRefreshToken makes a random 256 bit token encoded in hex.
