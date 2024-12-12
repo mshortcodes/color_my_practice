@@ -79,7 +79,7 @@ func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "refresh_token",
 		Value:    refreshToken,
-		Path:     "/api/refresh",
+		Path:     "/api/",
 		Expires:  time.Now().UTC().Add(time.Hour * 24 * 60),
 		Secure:   true,
 		HttpOnly: true,

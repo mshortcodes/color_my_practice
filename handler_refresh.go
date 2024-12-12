@@ -10,10 +10,6 @@ import (
 // handlerRefresh creates a new JWT for the given user
 // after validating the refresh token.
 func (cfg *apiConfig) handlerRefresh(w http.ResponseWriter, r *http.Request) {
-	type response struct {
-		Token string `json:"token"`
-	}
-
 	refreshToken, err := r.Cookie("refresh_token")
 	if err != nil {
 		respondWithError(w, http.StatusBadRequest, "couldn't find token", err)
@@ -32,9 +28,17 @@ func (cfg *apiConfig) handlerRefresh(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	respondWithJSON(w, http.StatusOK, response{
-		Token: accessToken,
+	http.SetCookie(w, &http.Cookie{
+		Name:     "jwt",
+		Value:    accessToken,
+		Path:     "/",
+		Expires:  time.Now().UTC().Add(time.Hour),
+		Secure:   true,
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
 	})
+
+	w.WriteHeader(http.StatusNoContent)
 }
 
 // handlerRevoke revokes a refresh token.
