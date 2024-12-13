@@ -155,7 +155,7 @@ Response body:
 
 ---
 
-#### `GET /api/logs`
+#### `GET /api/logs` **_INSECURE_**
 
 Returns an array of all logs in descending order (newest to oldest).
 
