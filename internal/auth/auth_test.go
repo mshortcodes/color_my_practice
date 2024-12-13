@@ -1,6 +1,11 @@
 package auth
 
-import "testing"
+import (
+	"testing"
+	"time"
+
+	"github.com/google/uuid"
+)
 
 func TestCheckPasswordHash(t *testing.T) {
 	password1 := "abc123"
@@ -44,7 +49,55 @@ func TestCheckPasswordHash(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			err := CheckPasswordHash(tc.password, tc.hash)
 			if (err != nil) != tc.wantErr {
-				t.Errorf("CheckPasswordHash() error = %v, wantErr = %v", err, tc.wantErr)
+				t.Errorf("CheckPasswordHash() error = %v, wantErr %v", err, tc.wantErr)
+			}
+		})
+	}
+}
+
+func TestValidateJWT(t *testing.T) {
+	userID := uuid.New()
+	token, _ := MakeJWT(userID, "secret", time.Hour)
+
+	cases := []struct {
+		name        string
+		tokenString string
+		tokenSecret string
+		wantUserID  uuid.UUID
+		wantErr     bool
+	}{
+		{
+			name:        "valid token",
+			tokenString: token,
+			tokenSecret: "secret",
+			wantUserID:  userID,
+			wantErr:     false,
+		},
+		{
+			name:        "invalid token",
+			tokenString: "invalid_token_string",
+			tokenSecret: "secret",
+			wantUserID:  uuid.Nil,
+			wantErr:     true,
+		},
+		{
+			name:        "wrong secret",
+			tokenString: token,
+			tokenSecret: "wrong_secret",
+			wantUserID:  uuid.Nil,
+			wantErr:     true,
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			gotUserID, err := ValidateJWT(tc.tokenString, tc.tokenSecret)
+			if (err != nil) != tc.wantErr {
+				t.Errorf("ValidateJWT() error = %v, wantErr %v", err, tc.wantErr)
+				return
+			}
+			if gotUserID != tc.wantUserID {
+				t.Errorf("ValidateJWT() gotUserID = %v, want %v", gotUserID, tc.wantUserID)
 			}
 		})
 	}
