@@ -5,15 +5,9 @@
 - [About](#about)
 - [API](#api)
   - [Users](#users)
+  - [Logs](#logs)
   - [Auth](#auth)
-  - [Chirps](#chirps)
-  - [Admin](#admin)
-  - [General](#general)
-  - [Polka](#polka)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#clone-the-repo)
-  - [Database Setup](#database-setup)
+  - [Frontend](#frontend)
 
 ## About
 
@@ -61,9 +55,9 @@ User resource:
 }
 ```
 
-#### `POST /api/users`
-
 ---
+
+#### `POST /api/users`
 
 Creates a new user.
 
@@ -87,9 +81,9 @@ Response body:
 }
 ```
 
-#### `PUT /api/users`
-
 ---
+
+#### `PUT /api/users`
 
 Updates a user's email and password.
 
@@ -113,11 +107,25 @@ Response body:
 }
 ```
 
+---
+
 ### Logs
 
-#### `POST /api/logs`
+Log resource:
+
+```json
+{
+  "id": "c8600bd1-6e75-43af-8d7c-bb122c01f541",
+  "date": "2024-12-12",
+  "color_depth": 5,
+  "confirmed": false,
+  "user_id": "8f88ab37-133f-411b-bd0f-134c614c390a"
+}
+```
 
 ---
+
+#### `POST /api/logs`
 
 Creates a practice log for the given day.
 
@@ -145,11 +153,15 @@ Response body:
 }
 ```
 
-#### `GET /api/logs`
-
 ---
 
-Returns an array of all logs in descending order.
+#### `GET /api/logs`
+
+Returns an array of all logs in descending order (newest to oldest).
+
+#### `GET /api/logs?user_id=d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c`
+
+Filters by user when the user ID is provided as a query parameter.
 
 Response body:
 
@@ -159,8 +171,8 @@ Response body:
     "id": "c8600bd1-6e75-43af-8d7c-bb122c01f541",
     "date": "2024-12-12",
     "color_depth": 5,
-    "confirmed": false,
-    "user_id": "8f88ab37-133f-411b-bd0f-134c614c390a"
+    "confirmed": true,
+    "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
   },
   {
     "id": "86a508f5-32a8-41e0-b6c8-660869583efc",
@@ -186,13 +198,9 @@ If the log ID is provided in the path, then only that log is returned.
 }
 ```
 
-If the user ID is provided as a query parameter, then the logs will be filtered by that user.
-
-#### `GET /api/logs?user_id=d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c`
+---
 
 #### `PUT /api/logs/confirm`
-
----
 
 Sets the confirmed field to true for all logs given in the array.
 
@@ -229,19 +237,19 @@ Response body:
 ]
 ```
 
-#### `DELETE /api/logs/{logID}`
-
 ---
+
+#### `DELETE /api/logs/{logID}`
 
 Deletes a log by ID.
 
 Returns a 204 status code.
 
+---
+
 ### Auth
 
 #### `POST /api/login`
-
----
 
 Logs a user in. Sends a JWT and refresh token as cookies.
 
@@ -265,27 +273,27 @@ Response body:
 }
 ```
 
-#### `POST /api/refresh`
-
 ---
+
+#### `POST /api/refresh`
 
 Sends a new JWT after validating the refresh token.
 
 Returns a 204 status code.
 
-#### `POST /api/revoke`
-
 ---
+
+#### `POST /api/revoke`
 
 Revokes a refresh token.
 
 Returns a 204 status code.
 
+---
+
 ### Frontend
 
 #### `GET /app/`
-
----
 
 Serves a simple status page.
 
