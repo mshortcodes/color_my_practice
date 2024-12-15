@@ -2,7 +2,9 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -40,6 +42,12 @@ func (cfg *apiConfig) handlerUsersCreate(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	err = validateParams(params.Email, params.Password)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "invalid email or password", err)
+		return
+	}
+
 	hashedPassword, err := auth.HashPassword(params.Password)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "couldn't hash password", err)
@@ -63,4 +71,20 @@ func (cfg *apiConfig) handlerUsersCreate(w http.ResponseWriter, r *http.Request)
 			Email:     user.Email,
 		},
 	})
+}
+
+// validateParams offers basic email and password validation.
+// It does not enforce robust or secure user info for testing purposes.
+func validateParams(email, password string) error {
+	if email == "" {
+		return errors.New("email can't be empty")
+	}
+	if !strings.ContainsRune(email, '@') {
+		return errors.New("email must contain @")
+	}
+	if password == "" {
+		return errors.New("password can't be empty")
+	}
+
+	return nil
 }

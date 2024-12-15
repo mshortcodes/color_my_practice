@@ -42,6 +42,12 @@ func (cfg *apiConfig) handlerUsersUpdate(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	err = validateParams(params.Email, params.Password)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "invalid email or password", err)
+		return
+	}
+
 	hashedPassword, err := auth.HashPassword(params.Password)
 	if err != nil {
 		respondWithError(w, http.StatusInternalServerError, "couldn't hash password", err)
