@@ -1,3 +1,5 @@
+![code coverage badge](https://github.com/mshortcodes/color_my_practice/actions/workflows/ci.yml/badge.svg)
+
 # Color My Practice 🎨
 
 ## Table of Contents
