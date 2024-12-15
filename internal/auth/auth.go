@@ -3,7 +3,9 @@ package auth
 import (
 	"crypto/rand"
 	"encoding/hex"
+	"errors"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -11,7 +13,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-const tokenIssuer = "color-my-practice"
+// GetTokenIssuer retrieves the TOKEN_ISSUER environment variable.
+func GetTokenIssuer() (string, error) {
+	tokenIssuer := os.Getenv("TOKEN_ISSUER")
+	if tokenIssuer == "" {
+		return "", errors.New("TOKEN_ISSUER not set")
+	}
+
+	return tokenIssuer, nil
+}
 
 // HashPassword uses bcrypt to generate a hashed password from plaintext.
 func HashPassword(password string) (string, error) {
@@ -35,6 +45,8 @@ func CheckPasswordHash(password, hash string) error {
 
 // MakeJWT creates a new JWT.
 func MakeJWT(userID uuid.UUID, tokenSecret string, expiresIn time.Duration) (string, error) {
+	tokenIssuer, _ := GetTokenIssuer()
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
 		Issuer:    tokenIssuer,
 		IssuedAt:  jwt.NewNumericDate(time.Now().UTC()),
@@ -53,6 +65,8 @@ func MakeJWT(userID uuid.UUID, tokenSecret string, expiresIn time.Duration) (str
 // validateJWT validates a JWT by extracting the claims and checking
 // the issuer, expiration time, and user ID.
 func ValidateJWT(tokenString, tokenSecret string) (uuid.UUID, error) {
+	tokenIssuer, _ := GetTokenIssuer()
+
 	token, err := jwt.ParseWithClaims(tokenString, &jwt.RegisteredClaims{}, func(t *jwt.Token) (interface{}, error) {
 		return []byte(tokenSecret), nil
 	})

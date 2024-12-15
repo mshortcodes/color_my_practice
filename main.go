@@ -10,6 +10,7 @@ import (
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"github.com/mshortcodes/color_my_practice/internal/auth"
 	"github.com/mshortcodes/color_my_practice/internal/database"
 )
 
@@ -37,6 +38,11 @@ func main() {
 	platform := os.Getenv("PLATFORM")
 	if platform == "" {
 		log.Fatal("PLATFORM not set")
+	}
+
+	_, err := auth.GetTokenIssuer()
+	if err != nil {
+		log.Fatal("TOKEN_ISSUER not set")
 	}
 
 	dbConn, err := sql.Open("postgres", dbURL)
