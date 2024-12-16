@@ -1,0 +1,43 @@
+name: cd
+
+on:
+  workflow_run:
+    workflows:
+      - ci
+    types:
+      - completed
+
+jobs:
+  deploy:
+    name: deploy
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    env:
+      PROJECT_ID: color-my-practice
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.3"
+
+      - name: Build
+        run: go build
+
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      - name: Set up Cloud SDK
+        uses: "google-github-actions/setup-gcloud@v2"
+
+      - name: Build, tag, and push image to Google Container Registry
+        run: "gcloud builds submit --tag us-central1-docker.pkg.dev/color-my-practice/cmp-ar-repo/color-my-practice:latest ."
+
+      - name: Print
+        run: echo "Deploying to $PROJECT_ID"
