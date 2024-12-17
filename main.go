@@ -25,6 +25,11 @@ type apiConfig struct {
 func main() {
 	godotenv.Load()
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		log.Fatal("PORT not set")
+	}
+
 	dbURL := os.Getenv("DB_URL")
 	if dbURL == "" {
 		log.Fatal("DB_URL not set")
@@ -61,7 +66,6 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
-	port := "8080"
 
 	srv := &http.Server{
 		Addr:              ":" + port,
