@@ -28,9 +28,6 @@ jobs:
       - name: Build
         run: go build
 
-      - name: verify binary
-        run: ls
-
       - id: auth
         uses: google-github-actions/auth@v2
         with:
