@@ -34,10 +34,13 @@ jobs:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: Set up Cloud SDK
-        uses: "google-github-actions/setup-gcloud@v2"
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: Build, tag, and push image to Google Container Registry
-        run: "gcloud builds submit --tag us-central1-docker.pkg.dev/color-my-practice/cmp-ar-repo/color-my-practice:latest ."
+        run: gcloud builds submit --tag us-central1-docker.pkg.dev/color-my-practice/cmp-ar-repo/color-my-practice:latest .
 
       - name: Print
         run: echo "Deploying to $PROJECT_ID"
+
+      - name: Deploy to Cloud run
+        run: gcloud run deploy color-my-practice --image us-central1-docker.pkg.dev/color-my-practice/cmp-ar-repo/color-my-practice:latest --region us-central1 --allow-unauthenticated --project color-my-practice --max-instances=2

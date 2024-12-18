@@ -26,9 +26,13 @@ func main() {
 	godotenv.Load()
 
 	port := os.Getenv("PORT")
-	log.Printf("debugging port: %s\n", port)
 	if port == "" {
 		log.Fatal("PORT not set")
+	}
+
+	platform := os.Getenv("PLATFORM")
+	if platform == "" {
+		log.Fatal("PLATFORM not set")
 	}
 
 	dbURL := os.Getenv("DB_URL")
@@ -39,11 +43,6 @@ func main() {
 	jwtSecret := os.Getenv("JWT_SECRET")
 	if jwtSecret == "" {
 		log.Fatal("JWT_SECRET not set")
-	}
-
-	platform := os.Getenv("PLATFORM")
-	if platform == "" {
-		log.Fatal("PLATFORM not set")
 	}
 
 	_, err := auth.GetTokenIssuer()
