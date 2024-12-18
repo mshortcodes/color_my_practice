@@ -26,6 +26,7 @@ func main() {
 	godotenv.Load()
 
 	port := os.Getenv("PORT")
+	log.Printf("debugging port: %s\n", port)
 	if port == "" {
 		log.Fatal("PORT not set")
 	}
