@@ -44,17 +44,17 @@ jobs:
       - name: Install Cloud SQL Proxy
         run: curl -o cloud-sql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.14.2/cloud-sql-proxy.linux.amd64 && chmod +x cloud-sql-proxy
 
-      - name: Start Proxy
+      - name: Start Cloud SQL Proxy in background
         run: ./cloud-sql-proxy $INSTANCE_CONN_NAME &
 
       - name: Install Goose
         run: go install github.com/pressly/goose/v3/cmd/goose@latest
-      #testing new DB_URL
+
       - name: Run migrations
         run: ./scripts/migrateup.sh
 
-      - name: Print
+      - name: Print deploy message
         run: echo "Deploying to $PROJECT_ID"
 
       - name: Deploy to Cloud run
-        run: gcloud run deploy color-my-practice --image us-central1-docker.pkg.dev/color-my-practice/cmp-ar-repo color-my-practice:latest --region us-central1 --allow-unauthenticated --project color-my-practice --max-instances=2 --env-vars INSTANCE_CONN_NAME=$INSTANCE_CONN_NAME --env-vars DB_URL=${{ secrets.DB_URL }} --env-vars JWT_SECRET=${{ secrets.JWT_SECRET }} --env-vars TOKEN_ISSUER=${{ secrets.TOKEN_ISSUER }} --env-vars PLATFORM=${{ secrets.PLATFORM }}
+        run: gcloud run deploy color-my-practice --image us-central1-docker.pkg.dev/color-my-practice/cmp-ar-repo/color-my-practice:latest --region us-central1 --allow-unauthenticated --project color-my-practice --max-instances=2 --set-env-vars INSTANCE_CONN_NAME=$INSTANCE_CONN_NAME,DB_URL=${{ secrets.DB_URL }},JWT_SECRET=${{ secrets.JWT_SECRET }},TOKEN_ISSUER=${{ secrets.TOKEN_ISSUER }},PLATFORM=${{ secrets.PLATFORM }}
