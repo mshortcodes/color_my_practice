@@ -57,4 +57,4 @@ jobs:
         run: echo "Deploying to $PROJECT_ID"
 
       - name: Deploy to Cloud run
-        run: gcloud run deploy color-my-practice --image us-central1-docker.pkg.dev/color-my-practice/cmp-ar-repo/color-my-practice:latest --region us-central1 --allow-unauthenticated --project color-my-practice --max-instances=2 --set-secrets DB_URL=projects/$PROJECT_ID/secrets/DB_URL/versions/latest --set-secrets JWT_SECRET=projects/$PROJECT_ID/secrets/JWT_SECRET/versions/latest --set-secrets TOKEN_ISSUER=projects/$PROJECT_ID/secrets/TOKEN_ISSUER/versions/latest --set-secrets PLATFORM=projects/$PROJECT_ID/secrets/PLATFORM/versions/latest
+        run: gcloud run deploy color-my-practice --image us-central1-docker.pkg.dev/color-my-practice/cmp-ar-repo/color-my-practice:latest --region us-central1 --allow-unauthenticated --project color-my-practice --max-instances=2 --set-secrets DB_URL=projects/$PROJECT_ID/secrets/DB_URL:latest --set-secrets JWT_SECRET=projects/$PROJECT_ID/secrets/JWT_SECRET:latest --set-secrets TOKEN_ISSUER=projects/$PROJECT_ID/secrets/TOKEN_ISSUER:latest --set-secrets PLATFORM=projects/$PROJECT_ID/secrets/PLATFORM:latest
