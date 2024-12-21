@@ -1,7 +1,8 @@
 FROM debian:stable-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates curl
+    ca-certificates curl && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN curl -o cloud-sql-proxy https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.14.2/cloud-sql-proxy.linux.amd64 && \
     chmod +x cloud-sql-proxy
