@@ -53,6 +53,9 @@ jobs:
       - name: Run migrations
         run: ./scripts/migrateup.sh
 
+      - name: Unset previous env vars from manual deploys
+        run: gcloud run services update color-my-practice --region us-central1 --project $PROJECT_ID --unset-env-vars DB_URL,JWT_SECRET,TOKEN_ISSUER,PLATFORM
+
       - name: Print deploy message
         run: echo "Deploying to $PROJECT_ID"
 
