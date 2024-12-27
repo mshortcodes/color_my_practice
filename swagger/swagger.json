@@ -1,0 +1,91 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "Color My Practice",
+    "description": "An API for music students to log their practice times in a fun, simple way. Visit the [GitHub](https://github.com/mshortcodes/color_my_practice) page for more info. Interactive documentation generated with [Swagger UI](https://swagger.io/tools/swagger-ui/).",
+    "version": "1.0.0"
+  },
+  "tags": [
+    {
+      "name": "users",
+      "description": "Interact with the user resource"
+    },
+    {
+      "name": "logs",
+      "description": "Perform CRUD operations on practice logs"
+    },
+    {
+      "name": "auth",
+      "description": "Manage authentication"
+    }
+  ],
+  "paths": {
+    "/api/logs": {
+      "get": {
+        "summary": "Returns an array of all logs in descending order (newest to oldest).",
+        "tags": ["logs"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          }
+        }
+      },
+      "Log": {
+        "type": "object",
+        "required": ["date", "color_depth"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "color_depth": {
+            "type": "number",
+            "format": "int32"
+          },
+          "confirmed": {
+            "type": "boolean"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      }
+    }
+  }
+}

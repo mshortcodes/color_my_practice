@@ -67,7 +67,6 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	// test cd
 	srv := &http.Server{
 		Addr:              ":" + port,
 		Handler:           mux,
@@ -76,8 +75,6 @@ func main() {
 		WriteTimeout:      10 * time.Second,
 		IdleTimeout:       10 * time.Second,
 	}
-
-	mux.HandleFunc("GET /app/", apiCfg.handlerStatus)
 
 	mux.HandleFunc("POST /api/users", apiCfg.handlerUsersCreate)
 	mux.HandleFunc("PUT /api/users", apiCfg.handlerUsersUpdate)
@@ -92,7 +89,9 @@ func main() {
 	mux.HandleFunc("POST /api/refresh", apiCfg.handlerRefresh)
 	mux.HandleFunc("POST /api/revoke", apiCfg.handlerRevoke)
 
+	mux.HandleFunc("GET /status", apiCfg.handlerStatus)
 	mux.HandleFunc("POST /admin/reset", apiCfg.handlerReset)
+	mux.Handle("/api/docs/", http.StripPrefix("/api/docs", http.FileServer(http.Dir("./swagger"))))
 
 	log.Fatal(srv.ListenAndServe())
 }
