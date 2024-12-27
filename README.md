@@ -9,11 +9,13 @@
   - [Users](#users)
   - [Logs](#logs)
   - [Auth](#auth)
-  - [Frontend](#frontend)
+  - [Other](#other)
 
 ## About
 
 Color My Practice is a simple app for music students to keep track of their practice time. While I focused on the backend for this project, this is an app I would really like to see fully implemented as I think it would be a fun way for students to visualize their practice time. Building this server was heavily inspired by Boot.dev's Chirpy project, which was one of my favorite projects on Boot.dev. There were many tricky concepts which I wanted to further explore and solidify my understanding of.
+
+I chose to use Swagger UI to create interactive documentation which makes testing the API more convenient. Since I didn't include a frontend, it also made for a nice cover-up.
 
 Key concepts:
 
@@ -23,6 +25,8 @@ Key concepts:
 - Working with JWTs, refresh tokens, hashing
 - Sending cookies to store tokens and reading them for authentication
 - Using SQL to store and retrieve data from a Postgres database
+- Integrating a CI/CD pipeline
+- Dockerizing and deploying to Google Cloud
 
 Tools:
 
@@ -293,9 +297,9 @@ Returns a 204 status code.
 
 ---
 
-### Frontend
+### Other
 
-#### `GET /app/`
+#### `GET /status`
 
 Serves a simple status page.
 
