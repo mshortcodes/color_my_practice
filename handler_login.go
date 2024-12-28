@@ -69,7 +69,7 @@ func (cfg *apiConfig) handlerLogin(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "jwt",
 		Value:    accessToken,
-		Path:     "/",
+		Path:     "/api/",
 		Expires:  time.Now().UTC().Add(time.Hour),
 		Secure:   true,
 		HttpOnly: true,
