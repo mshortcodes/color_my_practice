@@ -10,6 +10,7 @@ import (
 	"github.com/mshortcodes/color_my_practice/internal/database"
 )
 
+// handlerLogsConfirm sets the confirmed field to true for all logs given in the array.
 func (cfg *apiConfig) handlerLogsConfirm(w http.ResponseWriter, r *http.Request) {
 	type parameters struct {
 		LogIDs   []string `json:"log_ids"`
