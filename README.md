@@ -1,6 +1,6 @@
 ![code coverage badge](https://github.com/mshortcodes/color_my_practice/actions/workflows/ci.yml/badge.svg)
 
-# Color My Practice 🎨
+# Color My Practice 🖌️
 
 ## Table of Contents
 
@@ -63,7 +63,7 @@ User resource:
 
 ---
 
-#### `POST /api/users`
+#### `POST /api/users` 🔓
 
 Creates a new user.
 
@@ -89,7 +89,7 @@ Response body:
 
 ---
 
-#### `PUT /api/users`
+#### `PUT /api/users` 🔒
 
 Updates a user's email and password.
 
@@ -131,7 +131,7 @@ Log resource:
 
 ---
 
-#### `POST /api/logs`
+#### `POST /api/logs` 🔒
 
 Creates a practice log for the given day.
 
@@ -161,11 +161,11 @@ Response body:
 
 ---
 
-#### `GET /api/logs` **_INSECURE_**
+#### `GET /api/logs` **_INSECURE_** 🔓
 
 Returns an array of all logs in descending order (newest to oldest).
 
-#### `GET /api/logs?user_id=d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c`
+#### `GET /api/logs?user_id=d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c` 🔓
 
 Filters by user when the user ID is provided as a query parameter.
 
@@ -192,7 +192,7 @@ Response body:
 
 If the log ID is provided in the path, then only that log is returned.
 
-#### `GET /api/logs/{logID}`
+#### `GET /api/logs/{logID}` 🔓
 
 ```json
 {
@@ -206,7 +206,7 @@ If the log ID is provided in the path, then only that log is returned.
 
 ---
 
-#### `PUT /api/logs/confirm`
+#### `PUT /api/logs/confirm` 🔒
 
 Sets the confirmed field to true for all logs given in the array.
 
@@ -245,7 +245,7 @@ Response body:
 
 ---
 
-#### `DELETE /api/logs/{logID}`
+#### `DELETE /api/logs/{logID}` 🔒
 
 Deletes a log by ID.
 
@@ -255,7 +255,7 @@ Returns a 204 status code.
 
 ### Auth
 
-#### `POST /api/login`
+#### `POST /api/login` 🔓
 
 Logs a user in. Sends a JWT and refresh token as cookies.
 
@@ -281,7 +281,7 @@ Response body:
 
 ---
 
-#### `POST /api/refresh`
+#### `POST /api/refresh` 🔒
 
 Sends a new JWT after validating the refresh token.
 
@@ -289,7 +289,7 @@ Returns a 204 status code.
 
 ---
 
-#### `POST /api/revoke`
+#### `POST /api/revoke` 🔒
 
 Revokes a refresh token.
 
@@ -299,7 +299,7 @@ Returns a 204 status code.
 
 ### Other
 
-#### `GET /status`
+#### `GET /status` 🔓
 
 Serves a simple status page.
 
