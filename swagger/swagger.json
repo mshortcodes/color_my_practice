@@ -2,7 +2,7 @@
   "openapi": "3.1.1",
   "info": {
     "title": "Color My Practice",
-    "description": "An API for music students to log their practice times in a fun, simple way. Visit the [GitHub](https://github.com/mshortcodes/color_my_practice) page for more info. Interactive documentation generated with [Swagger UI](https://swagger.io/tools/swagger-ui/).",
+    "description": "An API for music students to log their practice times in a fun, simple way. Visit the [GitHub](https://github.com/mshortcodes/color_my_practice) page for more info.\n\nInteractive documentation generated with [Swagger UI](https://swagger.io/tools/swagger-ui/).",
     "version": "1.0.0"
   },
   "tags": [
@@ -178,6 +178,96 @@
             "description": "internal server error"
           }
         }
+      },
+      "post": {
+        "summary": "Creates a practice log for the given day.",
+        "tags": ["logs"],
+        "security": [
+          {
+            "cookieJWT": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "date": "2024-12-12",
+                "color_depth": 5
+              },
+              "schema": {
+                "$ref": "#/components/schemas/LogsPostRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "created",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "c8600bd1-6e75-43af-8d7c-bb122c01f541",
+                  "date": "2024-12-12",
+                  "color_depth": 5,
+                  "confirmed": false,
+                  "user_id": "8f88ab37-133f-411b-bd0f-134c614c390a"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/LogsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "401": {
+            "description": "unauthorized"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletes a log by ID.",
+        "tags": ["logs"],
+        "security": [
+          {
+            "cookieJWT": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "logID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "no content"
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "401": {
+            "description": "unauthorized"
+          },
+          "403": {
+            "description": "forbidden"
+          },
+          "404": {
+            "description": "not found"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
       }
     },
     "/api/logs/confirm": {
@@ -266,6 +356,20 @@
       }
     },
     "schemas": {
+      "UsersRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          }
+        }
+      },
       "UsersResponse": {
         "type": "object",
         "required": ["id", "created_at", "updated_at", "email"],
@@ -288,17 +392,17 @@
           }
         }
       },
-      "UsersRequest": {
+      "LogsPostRequest": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": ["date", "color_depth"],
         "properties": {
-          "email": {
+          "date": {
             "type": "string",
-            "format": "email"
+            "format": "date"
           },
-          "password": {
-            "type": "string",
-            "format": "password"
+          "color_depth": {
+            "type": "number",
+            "format": "int32"
           }
         }
       },
