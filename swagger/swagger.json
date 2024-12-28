@@ -20,24 +20,255 @@
     }
   ],
   "paths": {
-    "/api/logs": {
-      "get": {
-        "summary": "Returns an array of all logs in descending order (newest to oldest).",
-        "tags": ["logs"],
-        "produces": ["application/json"],
+    "/api/users": {
+      "post": {
+        "summary": "Creates a new user.",
+        "tags": ["users"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsersResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Updates a user's email and password.",
+        "tags": ["users"],
+        "security": [
+          {
+            "cookieJWT": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "success"
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsersResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "401": {
+            "description": "unauthorized"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    "/api/logs": {
+      "get": {
+        "summary": "Returns an array of all logs.",
+        "description": "Insecure endpoint. Defaults to descending order (newest to oldest).",
+        "tags": ["logs"],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "Filter logs by user ID.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "logID",
+            "in": "path",
+            "description": "Filter logs by log ID. Returns a single log.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "singleLog": {
+                    "summary": "Single log",
+                    "value": {
+                      "id": "c8600bd1-6e75-43af-8d7c-bb122c01f541",
+                      "date": "2024-12-12",
+                      "color_depth": 5,
+                      "confirmed": true,
+                      "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
+                    }
+                  },
+                  "logArray": {
+                    "summary": "Array of logs",
+                    "value": [
+                      {
+                        "id": "c8600bd1-6e75-43af-8d7c-bb122c01f541",
+                        "date": "2024-12-12",
+                        "color_depth": 5,
+                        "confirmed": true,
+                        "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
+                      },
+                      {
+                        "id": "86a508f5-32a8-41e0-b6c8-660869583efc",
+                        "date": "2024-12-11",
+                        "color_depth": 2,
+                        "confirmed": false,
+                        "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
+                      }
+                    ]
+                  }
+                },
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/LogsResponse"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LogsResponse"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    "/api/logs/confirm": {
+      "put": {
+        "summary": "Sets the confirmed field to true for all logs given in the array.",
+        "tags": ["logs"],
+        "security": [
+          {
+            "cookieJWT": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": {
+                "log_ids": [
+                  "3769e508-3dd9-465e-8cda-783d560dfddc",
+                  "832bed98-a27b-419a-a067-e75d4ba30557"
+                ],
+                "password": "********"
+              },
+              "schema": {
+                "$ref": "#/components/schemas/LogsConfirmRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "example": [
+                  {
+                    "id": "c8600bd1-6e75-43af-8d7c-bb122c01f541",
+                    "date": "2024-12-12",
+                    "color_depth": 5,
+                    "confirmed": true,
+                    "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
+                  },
+                  {
+                    "id": "86a508f5-32a8-41e0-b6c8-660869583efc",
+                    "date": "2024-12-11",
+                    "color_depth": 2,
+                    "confirmed": false,
+                    "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
+                  }
+                ],
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/LogsResponse"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LogsResponse"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized"
+          },
+          "500": {
+            "description": "internal server error"
           }
         }
       }
     }
   },
   "components": {
+    "securitySchemes": {
+      "cookieJWT": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "jwt"
+      },
+      "cookieRefresh": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "refresh_token"
+      }
+    },
     "schemas": {
-      "User": {
+      "UsersResponse": {
         "type": "object",
-        "required": ["email", "password"],
+        "required": ["id", "created_at", "updated_at", "email"],
         "properties": {
           "id": {
             "type": "string",
@@ -54,6 +285,16 @@
           "email": {
             "type": "string",
             "format": "email"
+          }
+        }
+      },
+      "UsersRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email"
           },
           "password": {
             "type": "string",
@@ -61,9 +302,9 @@
           }
         }
       },
-      "Log": {
+      "LogsResponse": {
         "type": "object",
-        "required": ["date", "color_depth"],
+        "required": ["id", "date", "color_depth", "confirmed", "user_id"],
         "properties": {
           "id": {
             "type": "string",
@@ -83,6 +324,23 @@
           "user_id": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "LogsConfirmRequest": {
+        "type": "object",
+        "required": ["log_ids", "password"],
+        "properties": {
+          "log_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
           }
         }
       }
