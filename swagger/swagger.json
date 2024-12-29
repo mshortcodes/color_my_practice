@@ -17,6 +17,9 @@
     {
       "name": "auth",
       "description": "Manage authentication"
+    },
+    {
+      "name": "other"
     }
   ],
   "paths": {
@@ -54,6 +57,7 @@
       },
       "put": {
         "summary": "Updates a user's email and password.",
+        "description": "Requires the 'jwt' cookie.",
         "tags": ["users"],
         "security": [
           {
@@ -181,6 +185,7 @@
       },
       "post": {
         "summary": "Creates a practice log for the given day.",
+        "description": "Requires the 'jwt' cookie.",
         "tags": ["logs"],
         "security": [
           {
@@ -231,6 +236,7 @@
       },
       "delete": {
         "summary": "Deletes a log by ID.",
+        "description": "Requires the 'jwt' cookie.",
         "tags": ["logs"],
         "security": [
           {
@@ -273,6 +279,7 @@
     "/api/logs/confirm": {
       "put": {
         "summary": "Sets the confirmed field to true for all logs given in the array.",
+        "description": "Requires the 'jwt' cookie.",
         "tags": ["logs"],
         "security": [
           {
@@ -334,6 +341,106 @@
           },
           "401": {
             "description": "unauthorized"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    "/api/login": {
+      "post": {
+        "summary": "Logs a user in.",
+        "description": "Sends the 'jwt' and 'refresh_token' cookies.",
+        "tags": ["auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UsersResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "401": {
+            "description": "unauthorized"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    "/api/refresh": {
+      "post": {
+        "summary": "Sends a new JWT after validating the refresh token.",
+        "description": "Requires the 'refresh_token' cookie.",
+        "tags": ["auth"],
+        "security": [
+          {
+            "cookieRefresh": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "no content"
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "401": {
+            "description": "unauthorized"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    "/api/revoke": {
+      "post": {
+        "summary": "Revokes a refresh token.",
+        "description": "Requires the 'refresh_token' cookie.",
+        "tags": ["auth"],
+        "security": [
+          {
+            "cookieRefresh": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "no content"
+          },
+          "400": {
+            "description": "bad request"
+          },
+          "500": {
+            "description": "internal server error"
+          }
+        }
+      }
+    },
+    "/status": {
+      "get": {
+        "summary": "Serves a simple status page.",
+        "tags": ["other"],
+        "responses": {
+          "200": {
+            "description": "success"
           },
           "500": {
             "description": "internal server error"
