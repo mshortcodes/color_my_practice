@@ -38,7 +38,7 @@
         },
         "responses": {
           "201": {
-            "description": "created",
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
@@ -48,20 +48,19 @@
             }
           },
           "400": {
-            "description": "bad request"
+            "description": "Bad Request"
           },
           "500": {
-            "description": "internal server error"
+            "description": "Internal Server Error"
           }
         }
       },
       "put": {
         "summary": "Updates a user's email and password.",
-        "description": "Requires the 'jwt' cookie.",
         "tags": ["users"],
         "security": [
           {
-            "cookieJWT": []
+            "jwt": []
           }
         ],
         "requestBody": {
@@ -75,7 +74,7 @@
         },
         "responses": {
           "200": {
-            "description": "success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -85,20 +84,20 @@
             }
           },
           "400": {
-            "description": "bad request"
+            "description": "Bad Request"
           },
           "401": {
-            "description": "unauthorized"
+            "description": "Unauthorized"
           },
           "500": {
-            "description": "internal server error"
+            "description": "Internal Server Error"
           }
         }
       }
     },
     "/api/logs": {
       "get": {
-        "summary": "Returns an array of all logs.",
+        "summary": "Returns an array of logs.",
         "description": "Insecure endpoint. Defaults to descending order (newest to oldest).",
         "tags": ["logs"],
         "parameters": [
@@ -109,87 +108,56 @@
             "required": false,
             "schema": {
               "type": "string",
-              "format": "uuid"
-            }
-          },
-          {
-            "name": "logID",
-            "in": "path",
-            "description": "Filter logs by log ID. Returns a single log.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "example": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "success",
+            "description": "OK",
             "content": {
               "application/json": {
-                "examples": {
-                  "singleLog": {
-                    "summary": "Single log",
-                    "value": {
-                      "id": "c8600bd1-6e75-43af-8d7c-bb122c01f541",
-                      "date": "2024-12-12",
-                      "color_depth": 5,
-                      "confirmed": true,
-                      "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
-                    }
+                "example": [
+                  {
+                    "id": "c8600bd1-6e75-43af-8d7c-bb122c01f541",
+                    "date": "2024-12-12",
+                    "color_depth": 5,
+                    "confirmed": true,
+                    "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
                   },
-                  "logArray": {
-                    "summary": "Array of logs",
-                    "value": [
-                      {
-                        "id": "c8600bd1-6e75-43af-8d7c-bb122c01f541",
-                        "date": "2024-12-12",
-                        "color_depth": 5,
-                        "confirmed": true,
-                        "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
-                      },
-                      {
-                        "id": "86a508f5-32a8-41e0-b6c8-660869583efc",
-                        "date": "2024-12-11",
-                        "color_depth": 2,
-                        "confirmed": false,
-                        "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
-                      }
-                    ]
+                  {
+                    "id": "86a508f5-32a8-41e0-b6c8-660869583efc",
+                    "date": "2024-12-11",
+                    "color_depth": 2,
+                    "confirmed": false,
+                    "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
                   }
-                },
+                ],
                 "schema": {
-                  "oneOf": [
-                    {
-                      "$ref": "#/components/schemas/LogsResponse"
-                    },
-                    {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/LogsResponse"
-                      }
-                    }
-                  ]
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LogsResponse"
+                  }
                 }
               }
             }
           },
           "400": {
-            "description": "bad request"
+            "description": "Bad Request"
           },
           "500": {
-            "description": "internal server error"
+            "description": "Internal Server Error"
           }
         }
       },
       "post": {
         "summary": "Creates a practice log for the given day.",
-        "description": "Requires the 'jwt' cookie.",
+        "description": "color_depth must be between 1 and 5.",
         "tags": ["logs"],
         "security": [
           {
-            "cookieJWT": []
+            "jwt": []
           }
         ],
         "requestBody": {
@@ -207,7 +175,7 @@
         },
         "responses": {
           "201": {
-            "description": "created",
+            "description": "Created",
             "content": {
               "application/json": {
                 "example": {
@@ -224,23 +192,66 @@
             }
           },
           "400": {
-            "description": "bad request"
+            "description": "Bad Request"
           },
           "401": {
-            "description": "unauthorized"
+            "description": "Unauthorized"
           },
           "500": {
-            "description": "internal server error"
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/logs/{logID}": {
+      "get": {
+        "summary": "Returns a log by its ID.",
+        "tags": ["logs"],
+        "parameters": [
+          {
+            "name": "logID",
+            "in": "path",
+            "description": "Filter logs by log ID. Returns a single log.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "c8600bd1-6e75-43af-8d7c-bb122c01f541"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "c8600bd1-6e75-43af-8d7c-bb122c01f541",
+                  "date": "2024-12-12",
+                  "color_depth": 5,
+                  "confirmed": true,
+                  "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/LogsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "delete": {
         "summary": "Deletes a log by ID.",
-        "description": "Requires the 'jwt' cookie.",
         "tags": ["logs"],
         "security": [
           {
-            "cookieJWT": []
+            "jwt": []
           }
         ],
         "parameters": [
@@ -250,28 +261,29 @@
             "required": true,
             "schema": {
               "type": "string",
-              "format": "uuid"
+              "format": "uuid",
+              "example": "c8600bd1-6e75-43af-8d7c-bb122c01f541"
             }
           }
         ],
         "responses": {
           "204": {
-            "description": "no content"
+            "description": "No Content"
           },
           "400": {
-            "description": "bad request"
+            "description": "Bad Request"
           },
           "401": {
-            "description": "unauthorized"
+            "description": "Unauthorized"
           },
           "403": {
-            "description": "forbidden"
+            "description": "Forbidden"
           },
           "404": {
-            "description": "not found"
+            "description": "Not Found"
           },
           "500": {
-            "description": "internal server error"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -279,11 +291,10 @@
     "/api/logs/confirm": {
       "put": {
         "summary": "Sets the confirmed field to true for all logs given in the array.",
-        "description": "Requires the 'jwt' cookie.",
         "tags": ["logs"],
         "security": [
           {
-            "cookieJWT": []
+            "jwt": []
           }
         ],
         "requestBody": {
@@ -291,8 +302,8 @@
             "application/json": {
               "example": {
                 "log_ids": [
-                  "3769e508-3dd9-465e-8cda-783d560dfddc",
-                  "832bed98-a27b-419a-a067-e75d4ba30557"
+                  "c8600bd1-6e75-43af-8d7c-bb122c01f541",
+                  "86a508f5-32a8-41e0-b6c8-660869583efc"
                 ],
                 "password": "********"
               },
@@ -304,7 +315,7 @@
         },
         "responses": {
           "200": {
-            "description": "success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "example": [
@@ -340,10 +351,10 @@
             }
           },
           "401": {
-            "description": "unauthorized"
+            "description": "Unauthorized"
           },
           "500": {
-            "description": "internal server error"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -364,7 +375,7 @@
         },
         "responses": {
           "200": {
-            "description": "success",
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -374,13 +385,13 @@
             }
           },
           "400": {
-            "description": "bad request"
+            "description": "Bad Request"
           },
           "401": {
-            "description": "unauthorized"
+            "description": "Unauthorized"
           },
           "500": {
-            "description": "internal server error"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -388,25 +399,25 @@
     "/api/refresh": {
       "post": {
         "summary": "Sends a new JWT after validating the refresh token.",
-        "description": "Requires the 'refresh_token' cookie.",
+        "description": "Sends the 'jwt' cookie.",
         "tags": ["auth"],
         "security": [
           {
-            "cookieRefresh": []
+            "refresh_token": []
           }
         ],
         "responses": {
           "204": {
-            "description": "no content"
+            "description": "No Content"
           },
           "400": {
-            "description": "bad request"
+            "description": "Bad Request"
           },
           "401": {
-            "description": "unauthorized"
+            "description": "Unauthorized"
           },
           "500": {
-            "description": "internal server error"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -414,22 +425,21 @@
     "/api/revoke": {
       "post": {
         "summary": "Revokes a refresh token.",
-        "description": "Requires the 'refresh_token' cookie.",
         "tags": ["auth"],
         "security": [
           {
-            "cookieRefresh": []
+            "refresh_token": []
           }
         ],
         "responses": {
           "204": {
-            "description": "no content"
+            "description": "No Content"
           },
           "400": {
-            "description": "bad request"
+            "description": "Bad Request"
           },
           "500": {
-            "description": "internal server error"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -440,10 +450,21 @@
         "tags": ["other"],
         "responses": {
           "200": {
-            "description": "success"
+            "description": "Success"
           },
           "500": {
-            "description": "internal server error"
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/docs": {
+      "get": {
+        "summary": "Documentation for Color My Practice.",
+        "tags": ["other"],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -451,12 +472,12 @@
   },
   "components": {
     "securitySchemes": {
-      "cookieJWT": {
+      "jwt": {
         "type": "apiKey",
         "in": "cookie",
         "name": "jwt"
       },
-      "cookieRefresh": {
+      "refresh_token": {
         "type": "apiKey",
         "in": "cookie",
         "name": "refresh_token"
@@ -509,7 +530,8 @@
           },
           "color_depth": {
             "type": "number",
-            "format": "int32"
+            "format": "int32",
+            "description": "color_depth must be between 1 and 5."
           }
         }
       },
