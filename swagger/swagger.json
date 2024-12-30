@@ -155,7 +155,7 @@
       },
       "post": {
         "summary": "Creates a practice log for the given day.",
-        "description": "date must be YYYY-MM-DD format.\n\ncolor_depth must be between 1 and 5.",
+        "description": "Date must be in YYYY-MM-DD format.\n\nColor depth must be between 1 and 5.",
         "tags": ["logs"],
         "security": [
           {
@@ -213,7 +213,7 @@
           {
             "name": "logID",
             "in": "path",
-            "description": "Filter logs by log ID. Returns a single log.",
+            "description": "Filters logs by log ID. Returns a single log.",
             "required": true,
             "schema": {
               "type": "string",
@@ -511,7 +511,7 @@
           "color_depth": {
             "type": "number",
             "format": "int32",
-            "description": "date must be YYYY-MM-DD format.\n\ncolor_depth must be between 1 and 5."
+            "description": "Date must be in YYYY-MM-DD format.\n\nColor depth must be between 1 and 5."
           }
         }
       },
