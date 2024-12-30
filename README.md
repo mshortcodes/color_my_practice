@@ -5,6 +5,7 @@
 ## Table of Contents
 
 - [About](#about)
+  - [Overview](#overview)
 - [Testing the API](#testing-the-api)
   - [Swagger](#swagger)
   - [curl](#curl)
@@ -26,14 +27,16 @@ Key concepts:
 - Working with JWTs, refresh tokens, hashing
 - Sending cookies to store tokens and reading them for authentication
 - Using SQL to store and retrieve data from a Postgres database
+- Deploying to Google Cloud
 - Integrating a CI/CD pipeline
-- Dockerizing and deploying to Google Cloud
 
 Tools:
 
 - PostgreSQL
 - Goose
 - Sqlc
+
+### Overview
 
 Color My Practice follows a heatmap-style of logging practice time. On the calendar, a single day is clicked up to five times, with each number representing a range of practice times.
 
@@ -49,16 +52,26 @@ This is tracked as "color_depth" in the logs schema, which can be thought of as 
 
 ## Testing the API
 
+🔓 = unauthenticated endpoint
+
+🔒 = authenticated endpoint
+
+Authentication is handled via cookies.
+
+I've included two ways to interact with the API here: swagger and curl.
+
 ### Swagger
 
 Swagger automatically generates interactive documentation when provided a .json or .yml file that defines the API. I chose to implement this for two reasons:
 
 1. Create a visually appealing documentation page
-2. Make testing easier for those who prefer a GUI
+2. Make testing quick and easy
 
-Unfortunately, swagger is not perfect. It **_does not automatically manage cookies_**, which this API requires for many endpoints. If testing with swagger, you must manually get the appropriate cookie's value from the browser's devtools. On Chrome, this can be accessed with ctrl+shift+i (f12) > application > cookies.
+Visit https://colormypractice.com/api/docs to test the API with Swagger.
 
 ### Curl
+
+For those who prefer a CLI, I've included example curl requests at the bottom of each endpoint's section. Since this API uses cookies heavily, the example requests will create a file to store/send the cookies in your working directory.
 
 ## API
 
@@ -217,6 +230,13 @@ If the log ID is provided in the path, then only that log is returned.
   "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
 }
 ```
+
+<details>
+<summary>curl example</summary>
+<code>
+curl https://colormypractice.com/api/logs
+</code>
+</details>
 
 ---
 
