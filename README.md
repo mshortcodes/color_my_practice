@@ -235,9 +235,7 @@ Returns a log by its ID.
 
 <details>
 <summary>curl example</summary>
-<code>
-curl https://colormypractice.com/api/logs
-</code>
+<code>curl https://colormypractice.com/api/logs</code>
 </details>
 
 ---
