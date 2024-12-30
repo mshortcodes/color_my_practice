@@ -74,16 +74,15 @@ func (cfg *apiConfig) handlerUsersCreate(w http.ResponseWriter, r *http.Request)
 }
 
 // validateParams offers basic email and password validation.
-// It does not enforce robust or secure user info for testing purposes.
 func validateParams(email, password string) error {
 	if email == "" {
 		return errors.New("email can't be empty")
 	}
 	if !strings.ContainsRune(email, '@') {
-		return errors.New("email must contain @")
+		return errors.New("email format is invalid")
 	}
-	if password == "" {
-		return errors.New("password can't be empty")
+	if len(password) < 8 {
+		return errors.New("password must be at least 8 characters long")
 	}
 
 	return nil
