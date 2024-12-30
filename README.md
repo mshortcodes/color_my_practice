@@ -5,6 +5,9 @@
 ## Table of Contents
 
 - [About](#about)
+- [Testing the API](#testing-the-api)
+  - [Swagger](#swagger)
+  - [curl](#curl)
 - [API](#api)
   - [Users](#users)
   - [Logs](#logs)
@@ -14,8 +17,6 @@
 ## About
 
 Color My Practice is a simple app for music students to keep track of their practice time. While I focused on the backend for this project, this is an app I would really like to see fully implemented as I think it would be a fun way for students to visualize their practice time. Building this server was heavily inspired by Boot.dev's Chirpy project, which was one of my favorite projects on Boot.dev. There were many tricky concepts which I wanted to further explore and solidify my understanding of.
-
-I chose to use Swagger UI to create interactive documentation which makes testing the API more convenient. Since I didn't include a frontend, it also made for a nice cover-up.
 
 Key concepts:
 
@@ -45,6 +46,19 @@ For example:
 - Very dark green -> 1hr+
 
 This is tracked as "color_depth" in the logs schema, which can be thought of as an enumeration. There is also a "confirmed" column which can only be set to true if the parent has confirmed by entering the password.
+
+## Testing the API
+
+### Swagger
+
+Swagger automatically generates interactive documentation when provided a .json or .yml file that defines the API. I chose to implement this for two reasons:
+
+1. Create a visually appealing documentation page
+2. Make testing easier for those who prefer a GUI
+
+Unfortunately, swagger is not perfect. It **_does not automatically manage cookies_**, which this API requires for many endpoints. If testing with swagger, you must manually get the appropriate cookie's value from the browser's devtools. On Chrome, this can be accessed with ctrl+shift+i (f12) > application > cookies.
+
+### Curl
 
 ## API
 

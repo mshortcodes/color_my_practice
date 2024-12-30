@@ -2,7 +2,7 @@
   "openapi": "3.1.1",
   "info": {
     "title": "Color My Practice",
-    "description": "An API for music students to log their practice times in a fun, simple way. Visit the [GitHub](https://github.com/mshortcodes/color_my_practice) page for more info.\n\nInteractive documentation generated with [Swagger UI](https://swagger.io/tools/swagger-ui/).",
+    "description": "An API for music students to log their practice times in a fun, simple way. Visit the [GitHub](https://github.com/mshortcodes/color_my_practice) page for more info.\n\nEndpoints with a lock represent authenticated endpoints. These require cookies which the browser will handle automatically.\n\nInteractive documentation generated with [Swagger UI](https://swagger.io/tools/swagger-ui/).",
     "version": "1.0.0"
   },
   "tags": [
@@ -471,18 +471,6 @@
     }
   },
   "components": {
-    "securitySchemes": {
-      "jwt": {
-        "type": "apiKey",
-        "in": "cookie",
-        "name": "jwt"
-      },
-      "refresh_token": {
-        "type": "apiKey",
-        "in": "cookie",
-        "name": "refresh_token"
-      }
-    },
     "schemas": {
       "UsersRequest": {
         "type": "object",
