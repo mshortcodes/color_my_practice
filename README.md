@@ -99,7 +99,7 @@ Request body:
 ```json
 {
   "email": "user@example.com",
-  "password": "abc"
+  "password": "12345678"
 }
 ```
 
@@ -114,6 +114,14 @@ Response body:
 }
 ```
 
+<details>
+<summary>curl example</summary><pre><code>curl -X POST \
+-H 'Content-Type: application/json' \
+-d '{"email": "user@example.com", "password": "12345678"}' \
+https://colormypractice.com/api/users
+</pre></code>
+</details>
+
 ---
 
 #### `PUT /api/users` 🔒
@@ -125,7 +133,7 @@ Request body:
 ```json
 {
   "email": "alice@example.com",
-  "password": "abcd"
+  "password": "abcdefgh"
 }
 ```
 
@@ -139,6 +147,15 @@ Response body:
   "email": "alice@example.com"
 }
 ```
+
+<details>
+<summary>curl example</summary><pre><code>curl -X PUT \
+-H 'Content-Type: application/json' \
+-b cookies.txt \
+-d '{"email": "alice@example.com", "password": "abcdefgh"}' \
+https://colormypractice.com/api/users
+</pre></code>
+</details>
 
 ---
 
@@ -187,6 +204,11 @@ Response body:
 ]
 ```
 
+<details>
+<summary>curl example</summary><pre><code>curl https://colormypractice.com/api/logs?user_id={user_id}
+</pre></code>
+</details>
+
 ---
 
 #### `POST /api/logs` 🔒
@@ -217,6 +239,18 @@ Response body:
 }
 ```
 
+<details>
+<summary>curl example</summary><pre><code>curl -X POST \
+-H 'Content-Type: application/json' \
+-d '{
+  "date": "2024-12-12",
+  "color_depth": 5
+}' \
+-b cookies.txt \
+https://colormypractice.com/api/logs
+</pre></code>
+</details>
+
 ---
 
 Returns a log by its ID.
@@ -235,7 +269,7 @@ Returns a log by its ID.
 
 <details>
 <summary>curl example</summary>
-<code>curl https://colormypractice.com/api/logs</code>
+<code>curl https://colormypractice.com/api/logs/{logID}</code>
 </details>
 
 ---
@@ -245,6 +279,13 @@ Returns a log by its ID.
 Deletes a log by ID.
 
 Returns a 204 status code.
+
+<details>
+<summary>curl example</summary><pre><code>curl -X DELETE \
+-b cookies.txt \
+https://colormypractice.com/api/logs/{logID}
+</pre></code>
+</details>
 
 ---
 
@@ -260,7 +301,7 @@ Request body:
     "3769e508-3dd9-465e-8cda-783d560dfddc",
     "832bed98-a27b-419a-a067-e75d4ba30557"
   ],
-  "password": "abcd"
+  "password": "12345678"
 }
 ```
 
@@ -284,6 +325,21 @@ Response body:
   }
 ]
 ```
+
+<details>
+<summary>curl example</summary><pre><code>curl -X PUT \
+-H 'Content-Type: application/json' \
+-b cookies.txt \
+-d '{
+  "log_ids": [
+    "3769e508-3dd9-465e-8cda-783d560dfddc",
+    "832bed98-a27b-419a-a067-e75d4ba30557"
+  ],
+  "password": "12345678"
+}' \
+https://colormypractice.com/api/logs/confirm
+</pre></code>
+</details>
 
 ---
 
@@ -313,6 +369,15 @@ Response body:
 }
 ```
 
+<details>
+<summary>curl example</summary><pre><code>curl -X POST \
+-H 'Content-Type: application/json' \
+-c cookies.txt \
+-d '{"email": "user@example.com", "password": "12345678"}' \
+https://colormypractice.com/api/login
+</pre></code>
+</details>
+
 ---
 
 #### `POST /api/refresh` 🔒
@@ -321,6 +386,14 @@ Sends a new JWT after validating the refresh token.
 
 Returns a 204 status code.
 
+<details>
+<summary>curl example</summary><pre><code>curl -X POST \
+-b cookies.txt \
+-c cookies.txt \
+https://colormypractice.com/api/refresh
+</pre></code>
+</details>
+
 ---
 
 #### `POST /api/revoke` 🔒
@@ -328,6 +401,13 @@ Returns a 204 status code.
 Revokes a refresh token.
 
 Returns a 204 status code.
+
+<details>
+<summary>curl example</summary><pre><code>curl -X POST \
+-b cookies.txt \
+https://colormypractice.com/api/revoke
+</pre></code>
+</details>
 
 ---
 
@@ -342,3 +422,8 @@ Response body:
 Page hits: XXX  
 Users: XXX  
 Logs: XXX
+
+<details>
+<summary>curl example</summary><pre><code>curl https://colormypractice.com/api/status
+</pre></code>
+</details>
