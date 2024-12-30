@@ -26,6 +26,7 @@
     "/api/users": {
       "post": {
         "summary": "Creates a new user.",
+        "description": "Password must be at least 8 characters long.",
         "tags": ["users"],
         "requestBody": {
           "content": {
@@ -57,6 +58,7 @@
       },
       "put": {
         "summary": "Updates a user's email and password.",
+        "description": "Password must be at least 8 characters long.",
         "tags": ["users"],
         "security": [
           {
@@ -471,7 +473,8 @@
           },
           "password": {
             "type": "string",
-            "format": "password"
+            "format": "password",
+            "description": "Password must be at least 8 characters long."
           }
         }
       },
@@ -508,7 +511,7 @@
           "color_depth": {
             "type": "number",
             "format": "int32",
-            "description": "color_depth must be between 1 and 5."
+            "description": "date must be YYYY-MM-DD format.\n\ncolor_depth must be between 1 and 5."
           }
         }
       },
