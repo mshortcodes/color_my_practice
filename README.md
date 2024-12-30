@@ -158,6 +158,37 @@ Log resource:
 
 ---
 
+#### `GET /api/logs` **_INSECURE_** 🔓
+
+Returns an array of all logs in descending order (newest to oldest).
+
+Filters by user when the user ID is provided as a query parameter:
+
+`GET /api/logs?user_id={user_id}`
+
+Response body:
+
+```json
+[
+  {
+    "id": "c8600bd1-6e75-43af-8d7c-bb122c01f541",
+    "date": "2024-12-12",
+    "color_depth": 5,
+    "confirmed": true,
+    "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
+  },
+  {
+    "id": "86a508f5-32a8-41e0-b6c8-660869583efc",
+    "date": "2024-12-11",
+    "color_depth": 2,
+    "confirmed": false,
+    "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
+  }
+]
+```
+
+---
+
 #### `POST /api/logs` 🔒
 
 Creates a practice log for the given day.
@@ -188,36 +219,7 @@ Response body:
 
 ---
 
-#### `GET /api/logs` **_INSECURE_** 🔓
-
-Returns an array of all logs in descending order (newest to oldest).
-
-#### `GET /api/logs?user_id=d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c` 🔓
-
-Filters by user when the user ID is provided as a query parameter.
-
-Response body:
-
-```json
-[
-  {
-    "id": "c8600bd1-6e75-43af-8d7c-bb122c01f541",
-    "date": "2024-12-12",
-    "color_depth": 5,
-    "confirmed": true,
-    "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
-  },
-  {
-    "id": "86a508f5-32a8-41e0-b6c8-660869583efc",
-    "date": "2024-12-11",
-    "color_depth": 2,
-    "confirmed": false,
-    "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
-  }
-]
-```
-
-If the log ID is provided in the path, then only that log is returned.
+Returns a log by its ID.
 
 #### `GET /api/logs/{logID}` 🔓
 
@@ -237,6 +239,14 @@ If the log ID is provided in the path, then only that log is returned.
 curl https://colormypractice.com/api/logs
 </code>
 </details>
+
+---
+
+#### `DELETE /api/logs/{logID}` 🔒
+
+Deletes a log by ID.
+
+Returns a 204 status code.
 
 ---
 
@@ -276,14 +286,6 @@ Response body:
   }
 ]
 ```
-
----
-
-#### `DELETE /api/logs/{logID}` 🔒
-
-Deletes a log by ID.
-
-Returns a 204 status code.
 
 ---
 
