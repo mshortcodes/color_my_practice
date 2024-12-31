@@ -426,6 +426,6 @@ Users: XXX
 Logs: XXX
 
 <details>
-<summary>curl example</summary><pre><code>curl https://colormypractice.com/api/status
+<summary>curl example</summary><pre><code>curl https://colormypractice.com/status
 </pre></code>
 </details>
