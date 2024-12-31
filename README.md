@@ -74,6 +74,27 @@ Visit https://colormypractice.com/api/docs to test the API with Swagger.
 
 For those who prefer a CLI, I've included example curl requests at the bottom of each endpoint's section. Since this API uses cookies heavily, the example requests will create a file to store/send the cookies in your working directory.
 
+### Sample Workflow
+
+1. Create an account  
+   `POST /api/users`
+2. Log in  
+   `POST /api/login`
+3. Create a practice log  
+   `POST /api/logs`
+4. View practice logs  
+   `GET /api/logs?user_id={user_id}`
+5. Parent confirms the practice logs  
+   `PUT /api/logs/confirm`
+6. Refresh the JWT when it expires  
+   `POST /api/refresh`
+7. Delete a practice log  
+   `DELETE /api/logs/{logID}`
+8. Update email or password  
+   `PUT /api/users`
+9. Log out  
+   `POST /api/revoke`
+
 ## API
 
 ### Users
