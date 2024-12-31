@@ -319,7 +319,7 @@ Status codes:
 500 - Internal Server Error
 
 <details>
-<summary>curl example</summary><pre><code>curl -X DELETE \
+<summary>curl example</summary><pre><code>curl -X DELETE -I \
 -b cookies.txt \
 https://colormypractice.com/api/logs/{logID}
 </pre></code>
