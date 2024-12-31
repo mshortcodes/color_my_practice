@@ -9,6 +9,7 @@
 - [Testing the API](#testing-the-api)
   - [Swagger](#swagger)
   - [curl](#curl)
+  - [Sample Workflow](#sample-workflow)
 - [API](#api)
   - [Users](#users)
   - [Logs](#logs)
@@ -439,7 +440,7 @@ Status codes:
 500 - Internal Server Error
 
 <details>
-<summary>curl example</summary><pre><code>curl -X POST \
+<summary>curl example</summary><pre><code>curl -X POST -I \
 -b cookies.txt \
 -c cookies.txt \
 https://colormypractice.com/api/refresh
@@ -458,7 +459,7 @@ Status codes:
 500 - Internal Server Error
 
 <details>
-<summary>curl example</summary><pre><code>curl -X POST \
+<summary>curl example</summary><pre><code>curl -X POST -I \
 -b cookies.txt \
 https://colormypractice.com/api/revoke
 </pre></code>
