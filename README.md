@@ -116,6 +116,11 @@ Response body:
 }
 ```
 
+Status codes:  
+201 - Created  
+400 - Bad Request  
+500 - Internal Server Error
+
 <details>
 <summary>curl example</summary><pre><code>curl -X POST \
 -H 'Content-Type: application/json' \
@@ -149,6 +154,12 @@ Response body:
   "email": "alice@example.com"
 }
 ```
+
+Status codes:  
+200 - OK  
+400 - Bad Request  
+401 - Unauthorized  
+500 - Internal Server Error
 
 <details>
 <summary>curl example</summary><pre><code>curl -X PUT \
@@ -206,6 +217,11 @@ Response body:
 ]
 ```
 
+Status codes:  
+200 - OK  
+400 - Bad Request  
+500 - Internal Server Error
+
 <details>
 <summary>curl example</summary><pre><code>curl https://colormypractice.com/api/logs?user_id={user_id}
 </pre></code>
@@ -241,6 +257,12 @@ Response body:
 }
 ```
 
+Status codes:  
+201 - Created  
+400 - Bad Request  
+401 - Unauthorized  
+500 - Internal Server Error
+
 <details>
 <summary>curl example</summary><pre><code>curl -X POST \
 -H 'Content-Type: application/json' \
@@ -269,6 +291,11 @@ Returns a log by its ID.
 }
 ```
 
+Status codes:  
+200 - OK  
+400 - Bad Request  
+500 - Internal Server Error
+
 <details>
 <summary>curl example</summary>
 <code>curl https://colormypractice.com/api/logs/{logID}</code>
@@ -281,6 +308,14 @@ Returns a log by its ID.
 Deletes a log by ID.
 
 Returns a 204 status code.
+
+Status codes:  
+204 - No Content  
+400 - Bad Request  
+401 - Unauthorized  
+403 - Forbidden  
+404 - Not Found  
+500 - Internal Server Error
 
 <details>
 <summary>curl example</summary><pre><code>curl -X DELETE \
@@ -328,6 +363,11 @@ Response body:
 ]
 ```
 
+Status codes:  
+200 - OK  
+401 - Unauthorized  
+500 - Internal Server Error
+
 <details>
 <summary>curl example</summary><pre><code>curl -X PUT \
 -H 'Content-Type: application/json' \
@@ -371,6 +411,12 @@ Response body:
 }
 ```
 
+Status codes:  
+200 - OK  
+400 - Bad Request  
+401 - Unauthorized  
+500 - Internal Server Error
+
 <details>
 <summary>curl example</summary><pre><code>curl -X POST \
 -H 'Content-Type: application/json' \
@@ -386,7 +432,11 @@ https://colormypractice.com/api/login
 
 Sends a new JWT after validating the refresh token.
 
-Returns a 204 status code.
+Status codes:  
+204 - No Content  
+400 - Bad Request  
+401 - Unauthorized  
+500 - Internal Server Error
 
 <details>
 <summary>curl example</summary><pre><code>curl -X POST \
@@ -402,7 +452,10 @@ https://colormypractice.com/api/refresh
 
 Revokes a refresh token.
 
-Returns a 204 status code.
+Status codes:  
+204 - No Content  
+400 - Bad Request  
+500 - Internal Server Error
 
 <details>
 <summary>curl example</summary><pre><code>curl -X POST \
@@ -421,9 +474,15 @@ Serves a simple status page.
 
 Response body:
 
-Page hits: XXX  
-Users: XXX  
+```
+Page hits: XXX
+Users: XXX
 Logs: XXX
+```
+
+Status codes:  
+200 - OK  
+500 - Internal Server Error
 
 <details>
 <summary>curl example</summary><pre><code>curl https://colormypractice.com/status
