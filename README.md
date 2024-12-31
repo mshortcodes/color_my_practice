@@ -210,9 +210,20 @@ Log resource:
 
 ---
 
-#### `GET /api/logs` **_INSECURE_** 🔓
+#### `GET /api/logs` 🔓
 
 Returns an array of all logs in descending order (newest to oldest).
+
+Will not expose UUIDs.
+
+Response body:
+
+```json
+[
+  { "date": "2024-12-12", "color_depth": 5, "confirmed": false },
+  { "date": "2024-12-12", "color_depth": 5, "confirmed": true }
+]
+```
 
 Filters by user when the user ID is provided as a query parameter:
 

@@ -100,7 +100,7 @@
     "/api/logs": {
       "get": {
         "summary": "Returns an array of logs.",
-        "description": "Insecure endpoint. Defaults to descending order (newest to oldest).",
+        "description": "Defaults to descending order (newest to oldest).",
         "tags": ["logs"],
         "parameters": [
           {
@@ -120,27 +120,55 @@
             "description": "OK",
             "content": {
               "application/json": {
-                "example": [
-                  {
-                    "id": "c8600bd1-6e75-43af-8d7c-bb122c01f541",
-                    "date": "2024-12-12",
-                    "color_depth": 5,
-                    "confirmed": true,
-                    "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
+                "examples": {
+                  "No user ID": {
+                    "value": [
+                      {
+                        "date": "2024-12-12",
+                        "color_depth": 5,
+                        "confirmed": true
+                      },
+                      {
+                        "date": "2024-12-11",
+                        "color_depth": 2,
+                        "confirmed": false
+                      }
+                    ]
                   },
-                  {
-                    "id": "86a508f5-32a8-41e0-b6c8-660869583efc",
-                    "date": "2024-12-11",
-                    "color_depth": 2,
-                    "confirmed": false,
-                    "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
+                  "With user ID": {
+                    "value": [
+                      {
+                        "id": "c8600bd1-6e75-43af-8d7c-bb122c01f541",
+                        "date": "2024-12-12",
+                        "color_depth": 5,
+                        "confirmed": true,
+                        "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
+                      },
+                      {
+                        "id": "86a508f5-32a8-41e0-b6c8-660869583efc",
+                        "date": "2024-12-11",
+                        "color_depth": 2,
+                        "confirmed": false,
+                        "user_id": "d4eeefe3-0a27-4d72-8c43-32dd02f6cd1c"
+                      }
+                    ]
                   }
-                ],
+                },
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LogsResponse"
-                  }
+                  "oneOf": [
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LogsResponseSafe"
+                      }
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/LogsResponse"
+                      }
+                    }
+                  ]
                 }
               }
             }
@@ -512,6 +540,23 @@
             "type": "number",
             "format": "int32",
             "description": "Date must be in YYYY-MM-DD format.\n\nColor depth must be between 1 and 5."
+          }
+        }
+      },
+      "LogsResponseSafe": {
+        "type": "object",
+        "required": ["date", "color_depth", "confirmed"],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "color_depth": {
+            "type": "number",
+            "format": "int32"
+          },
+          "confirmed": {
+            "type": "boolean"
           }
         }
       },
