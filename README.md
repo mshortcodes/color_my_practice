@@ -94,6 +94,8 @@ User resource:
 
 Creates a new user.
 
+Password must be at least 8 characters long.
+
 Request body:
 
 ```json
@@ -353,8 +355,8 @@ Request body:
 
 ```json
 {
-  "email": "alice@example.com",
-  "password": "abcd"
+  "email": "user@example.com",
+  "password": "12345678"
 }
 ```
 
@@ -365,7 +367,7 @@ Response body:
   "id": "8f88ab37-133f-411b-bd0f-134c614c390a",
   "created_at": "2024-12-11T16:41:16.609607Z",
   "updated_at": "2024-12-11T16:58:10.551184Z",
-  "email": "alice@example.com"
+  "email": "user@example.com"
 }
 ```
 
