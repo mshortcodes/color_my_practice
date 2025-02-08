@@ -52,11 +52,11 @@ Tools:
 - Goose
 - Sqlc
 
+---
+
 <a id="overview"></a>
 
 ### 🔎 Overview
-
-#
 
 Color My Practice follows a heatmap-style of logging practice time. On the calendar, a single day is clicked up to five times, with each number representing a range of practice times.
 
