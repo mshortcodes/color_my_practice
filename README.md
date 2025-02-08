@@ -2,21 +2,36 @@
 
 # Color My Practice 🖌️
 
-## Table of Contents
+<a id="table-of-contents"></a>
+
+## 📄 Table of Contents
 
 - [About](#about)
   - [Overview](#overview)
-- [Testing the API](#testing-the-api)
+- [Usage](#usage)
   - [Swagger](#swagger)
   - [curl](#curl)
   - [Sample Workflow](#sample-workflow)
 - [API](#api)
   - [Users](#users)
+    - [POST /api/users](#post-api-users)
+    - [PUT /api/users](#put-api-users)
   - [Logs](#logs)
+    - [GET /api/logs](#get-api-logs)
+    - [POST /api/logs](#post-api-logs)
+    - [GET /api/logs/{logID}](#get-api-logs-logid)
+    - [DELETE /api/logs/{logID}](#delete-api-logs-logid)
+    - [PUT /api/logs/confirm](#put-api-logs-confirm)
   - [Auth](#auth)
+    - [POST /api/login](#post-api-login)
+    - [POST /api/refresh](#post-api-refresh)
+    - [POST /api/revoke](#post-api-revoke)
   - [Other](#other)
+    - [GET /status](#get-status)
 
-## About
+<a id="about"></a>
+
+## 📖 About
 
 Color My Practice is a simple app for music students to keep track of their practice time. While I focused on the backend for this project, this is an app I would really like to see fully implemented as I think it would be a fun way for students to visualize their practice time. Building this server was heavily inspired by Boot.dev's Chirpy project, which was one of my favorite projects on Boot.dev. There were many tricky concepts which I wanted to further explore and solidify my understanding of.
 
@@ -37,7 +52,9 @@ Tools:
 - Goose
 - Sqlc
 
-### Overview
+<a id="overview"></a>
+
+### 🔎 Overview
 
 Color My Practice follows a heatmap-style of logging practice time. On the calendar, a single day is clicked up to five times, with each number representing a range of practice times.
 
@@ -51,17 +68,19 @@ For example:
 
 This is tracked as "color_depth" in the logs schema, which can be thought of as an enumeration. There is also a "confirmed" column which can only be set to true if the parent has confirmed by entering the password.
 
-## Testing the API
+<a id="usage"></a>
 
-🔓 = unauthenticated endpoint
+## 🚀 Usage
 
-🔒 = authenticated endpoint
-
-Authentication is handled via cookies.
+Endpoints marked with a 🔒 require authentication via cookies.
 
 I've included two ways to interact with the API here: swagger and curl.
 
-### Swagger
+---
+
+<a id="swagger"></a>
+
+### 🎯 Swagger
 
 Swagger automatically generates interactive documentation when provided a .json or .yml file that defines the API. I chose to implement this for two reasons:
 
@@ -70,11 +89,19 @@ Swagger automatically generates interactive documentation when provided a .json 
 
 Visit https://colormypractice.com/api/docs to test the API with Swagger.
 
-### Curl
+---
+
+<a id="curl"></a>
+
+### 🎯 Curl
 
 For those who prefer a CLI, I've included example curl requests at the bottom of each endpoint's section. Since this API uses cookies heavily, the example requests will create a file to store/send the cookies in your working directory.
 
-### Sample Workflow
+---
+
+<a id="sample-workflow"></a>
+
+### 🧑‍💻 Sample Workflow
 
 1. Create an account  
    `POST /api/users`
@@ -95,9 +122,13 @@ For those who prefer a CLI, I've included example curl requests at the bottom of
 9. Log out  
    `POST /api/revoke`
 
-## API
+<a id="api"></a>
 
-### Users
+## 🔌 API
+
+<a id="users"></a>
+
+### 👥 Users
 
 User resource:
 
@@ -111,6 +142,8 @@ User resource:
 ```
 
 ---
+
+<a id="post-api-users"></a>
 
 #### `POST /api/users` 🔓
 
@@ -153,6 +186,8 @@ https://colormypractice.com/api/users
 
 ---
 
+<a id="put-api-users"></a>
+
 #### `PUT /api/users` 🔒
 
 Updates a user's email and password.
@@ -194,7 +229,9 @@ https://colormypractice.com/api/users
 
 ---
 
-### Logs
+<a id="logs"></a>
+
+### 📝 Logs
 
 Log resource:
 
@@ -209,6 +246,8 @@ Log resource:
 ```
 
 ---
+
+<a id="get-api-logs"></a>
 
 #### `GET /api/logs` 🔓
 
@@ -262,6 +301,8 @@ Status codes:
 
 ---
 
+<a id="post-api-logs"></a>
+
 #### `POST /api/logs` 🔒
 
 Creates a practice log for the given day.
@@ -312,6 +353,8 @@ https://colormypractice.com/api/logs
 
 Returns a log by its ID.
 
+<a id="get-api-logs-logid"></a>
+
 #### `GET /api/logs/{logID}` 🔓
 
 ```json
@@ -336,6 +379,8 @@ Status codes:
 
 ---
 
+<a id="delete-api-logs-logid"></a>
+
 #### `DELETE /api/logs/{logID}` 🔒
 
 Deletes a log by ID.
@@ -358,6 +403,8 @@ https://colormypractice.com/api/logs/{logID}
 </details>
 
 ---
+
+<a id="put-api-logs-confirm"></a>
 
 #### `PUT /api/logs/confirm` 🔒
 
@@ -418,7 +465,11 @@ https://colormypractice.com/api/logs/confirm
 
 ---
 
-### Auth
+<a id="auth"></a>
+
+### 🔒 Auth
+
+<a id="post-api-login"></a>
 
 #### `POST /api/login` 🔓
 
@@ -461,6 +512,8 @@ https://colormypractice.com/api/login
 
 ---
 
+<a id="post-api-refresh"></a>
+
 #### `POST /api/refresh` 🔒
 
 Sends a new JWT after validating the refresh token.
@@ -481,6 +534,8 @@ https://colormypractice.com/api/refresh
 
 ---
 
+<a id="post-api-revoke"></a>
+
 #### `POST /api/revoke` 🔒
 
 Revokes a refresh token.
@@ -499,7 +554,9 @@ https://colormypractice.com/api/revoke
 
 ---
 
-### Other
+### 📦 Other
+
+<a id="get-status"></a>
 
 #### `GET /status` 🔓
 
